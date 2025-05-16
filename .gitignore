@@ -1,9 +1,7 @@
 bob-wrapper/node_modules/*
-example-omsa-server/__pycache_/*
-example-omsa-server/Include/*
-example-omsa-server/Lib/*
-example-omsa-server/Scripts/*
-example-omsa-server/package-lock.json
-example-omsa-server/package.json
-example-omsa-server/pyenv.cfg
-.vscode
+example-omsa-server/__pycache__
+example-omsa-server/Include
+example-omsa-server/Lib
+example-omsa-server/Scripts
+example-omsa-server/*.json
+example-omsa-server/*.cfg
