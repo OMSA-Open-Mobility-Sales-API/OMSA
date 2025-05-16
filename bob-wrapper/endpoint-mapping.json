@@ -1,0 +1,5 @@
+{
+    "searchOfferHandler": "POST /v1/product",
+    "purchasePackageRequest": "POST /manifest",
+    "landingPage": "none"
+}

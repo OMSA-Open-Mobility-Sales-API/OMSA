@@ -1,0 +1,36 @@
+{ "type": "OfferCollection",
+  "offers": [
+$map($, function($set) {  
+$map($set, function($product) { 
+    {
+        "type": "offer",
+        "id": $product.productId,
+        "geometry": { "type": "Polygon", "coordinates" : $product.spatialValidity.areas[0].polygons },
+        "properties": {
+            "type": "offer",
+            "id": $product.productId,
+            "summary": {
+                "class": $product.travellersPerCategory[0].cls
+            },
+            "products": [
+                { 
+                    "type": "product",
+                    "id": $product.productId,
+                    "productName": $product.productTitle
+                } 
+            ],
+            "price": {
+                "amount": $product.fares[0].amount,
+                "taxPercentageUsed": $product.fares[0].vatPercent,
+                "currencyCode": $product.fares[0].currency
+            }, 
+            "expiryTime": $product.productExpire
+        }
+    }
+} )
+} )
+  ],
+  "numberMatched": $ ~> $count(),
+  "numberReturned": $ ~> $count(),
+  "links": []
+}

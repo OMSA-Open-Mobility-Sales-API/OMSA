@@ -1,0 +1,11 @@
+{
+  "recoverTickets": [],
+  "productSelections": [
+    $map(inputs.offerIds, function($offerId) {
+    {
+      "productId": $offerId
+    }
+    })
+  ],
+  "discountCodes": []
+}

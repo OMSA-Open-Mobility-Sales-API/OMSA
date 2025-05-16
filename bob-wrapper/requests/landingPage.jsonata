@@ -1,0 +1,23 @@
+{
+    "title":"OMSA Webserver",
+    "description":"This is the demo tool of the OMSA-BoB wrapper",
+    "links":[ { "rel": "search-offers",
+                "method": "POST",
+                "description": "Search for 2nd class zonal tickets, based on start location (StopId)",
+                "href": "/v1/processes/search-offers/execute",
+                "body": {  
+                    "inputs": {
+                        "type": "SEARCH_OFFER",
+                        "specification": { "from": { "placeId": "BoB:StopId:${StopId}" } },
+                        "startTime": "2025-05-15T06:42:05.358Z",
+                        "endTime": "2025-05-15T06:42:05.358Z",
+                        "travellers": [ 
+                            { "type": "user_profile",
+                              "requirements": [ { "type": "service", "class": "SECOND_CLASS" }  ],
+                              "ageGroup": "adult"
+                            } ]
+                    }
+                }
+              } 
+            ]
+}

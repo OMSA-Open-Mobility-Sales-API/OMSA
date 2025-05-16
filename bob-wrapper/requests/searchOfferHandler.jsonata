@@ -1,0 +1,62 @@
+{
+  "area": {
+    "polygons": [
+      [
+        {
+          "lat": bbox[0],
+          "long": bbox[1]
+        },
+        {
+          "lat": bbox[0],
+          "long": bbox[3]
+        },
+        {
+          "lat": bbox[2],
+          "long": bbox[3]
+        },
+        {
+          "lat": bbox[3],
+          "long": bbox[2]
+        }
+      ]
+    ]
+  },
+  "genericCategories": {
+    "fareClass": [
+      "inputs.travellers[0].requirements[type=service].class ~> $lowercase"
+    ]
+  },
+  "productCategoryIds": [
+    "inputs.travellers[0].requirements[type=service].product.name"
+  ],
+  "travellersPerCategory": [
+    {
+      "cls": "First class",
+      "tra": inputs.travellers[type=user_profile].count,
+      "trs": [
+        "inputs.travellers[type=individual_traveller].fullName"
+      ],
+      "sts": [
+        "inputs.travellers[0].requirements[type=spotReservation & spotType=passenger_spot].spot"
+      ]
+    }
+  ],
+  "discountCodes": [
+    "inputs.travellers[0].entitlements[type=commercial_profile].code"
+  ],
+  "productProperties": [
+    {
+      "name": "bike",
+      "value": "large"
+    }
+  ],
+  "temporal": {
+    "startOfValidity": "1985-04-12T23:20:50.52Z",
+    "endOfValidity": "1985-04-12T23:20:50.52Z",
+    "requestedRelativeValidity": "P30D",
+    "requestedAbsoluteValidity": "20220301/P90D",
+    "earliestDeparture": "1985-04-12T23:20:50.52Z",
+    "latestArrival": "1985-04-12T23:20:50.52Z"
+  },
+  "isPartOfInternationalTrip": false
+}

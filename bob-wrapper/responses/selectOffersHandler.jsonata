@@ -1,0 +1,46 @@
+{ "type": "package",
+  "id": manifestId,
+  "status": "offered",
+  "price": { "amount": fares[0].amount,
+             "currencyCode": fares[0].currency
+           },
+  "offers": [
+$map(products, function($product) { 
+    {
+        "type": "offer",
+        "id": $product.productId,
+        "properties": {
+            "type": "offer",
+            "id": $product.productId,
+            "summary": {
+                "class": $product.travellersPerCategory[0].cls
+            },
+            "products": [
+                { 
+                    "type": "product",
+                    "id": $product.productId,
+                    "productName": $product.productTitle
+                } 
+            ],
+            "price": {
+                "amount": $product.fares[0].amount,
+                "taxPercentageUsed": $product.fares[0].vatPercent,
+                "currencyCode": $product.fares[0].currency
+            }, 
+            "expiryTime": $product.productExpire
+        }, 
+        "links": [ { "rel": "purchase", "href": "/processes/purchase-package/execute", "method": "POST" 
+                 , "body": { "inputs": { "package": manifestId } } 
+                 },
+                 { "rel": "release", "href": "/processes/release-package/execute", "method": "POST" 
+                 , "body": { "inputs": { "package": manifestId } } 
+                 }
+                 ]
+    }
+} )
+
+  ],
+  "numberMatched": $ ~> $count(),
+  "numberReturned": $ ~> $count(),
+  "links": []
+}
