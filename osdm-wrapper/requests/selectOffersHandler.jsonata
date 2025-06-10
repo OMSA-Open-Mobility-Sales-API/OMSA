@@ -1,0 +1,8 @@
+{
+  "offers": 
+    $map(inputs.offerIds, function($offerId) {
+    {
+      "offerId": $offerId
+    }
+    })
+}

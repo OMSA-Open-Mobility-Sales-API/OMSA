@@ -270,47 +270,6 @@ paths:
                 "200":
                   description: Results received successfully
 
-  /processes/purchase-offers/execute:
-    post:
-      operationId: purchaseOffersProcessHandler
-      summary: "Handles purchase of offers"
-      security:
-        - BearerAuth: []
-        - OAuth: []
-        - OAuthPKI: []
-      tags:
-      - processes
-      parameters:
-        - $ref: "#/components/parameters/acceptLanguage"
-        - $ref: "#/components/parameters/authorization"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                inputs:
-                  $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
-      responses:
-        "200":
-          $ref: "#/components/responses/packageResponse"
-        default:
-          $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
-
   /processes/purchase-package/execute:
     post:
       operationId: purchasePackageProcessHandler
@@ -324,6 +283,9 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/bbox"
       requestBody:
         content:
           application/json:
@@ -1274,7 +1236,6 @@ components:
           COMMIT: "#/components/schemas/packageInput"
           RELEASE: "#/components/schemas/packageInput"
           PURCHASE_PACKAGE: "#/components/schemas/purchasePackageInput"
-          PURCHASE_OFFERS: "#/components/schemas/purchaseOffersInput"
           EXTEND_EXPIRY_TIME: "#/components/schemas/extendExpiryTimeInput"
       required:
       - type
@@ -1301,7 +1262,7 @@ components:
             enum: [ search_offer ]
           specification:
             allOf:
-            - $ref: "#/components/schemas/requestedTravelSpecification"
+            - $ref: "#/components/schemas/travelSpecification"
             - $ref: "#/components/schemas/placeDefinitions"
           pattern:
             $ref: "#/components/schemas/tripPattern"
@@ -1482,18 +1443,6 @@ components:
             type:
               type: string
               enum: [ purchase_package ]
-
-    purchaseOffersInput:
-      allOf:
-        - $ref: "#/components/schemas/selectOffersInput"
-        - $ref: "#/components/schemas/purchasePackageInput"
-        - type: object
-          required:
-          - type
-          properties:
-            type:
-              type: string
-              enum: [ purchase_offers ]
 
     redressInput:
       allOf: 
@@ -1865,31 +1814,6 @@ components:
           to:
             $ref: "#/components/schemas/placeReference"
 
-    requestedTravelSpecification:
-      type: object
-      properties:
-        from:
-          $ref: "#/components/schemas/externalReference"
-          description: use an ID contained in the **placeDefinitions** field, or from an external source, when using coordinates, please use the prefix 'gps:'
-        via:
-          type: array
-          description: use an ID contained in the **placeDefinitions** field, or from an external source, when using coordinates, please use the prefix 'gps:'
-          minItems: 0
-          maxItems: 3
-          items:
-            $ref: "#/components/schemas/externalReference"
-        to:
-          $ref: "#/components/schemas/externalReference"
-          description: use an ID contained in the **placeDefinitions** field, or from an external source, when using coordinates, please use the prefix 'gps:'
-        startTime:
-          $ref: "#/components/schemas/dateTime"
-          description: The intended departure time.
-            If left out and no endTime is set, the current time should be assumed.
-            If only the arrival time is specified, this is an implicit request for a guaranteed arrival at that time.
-        endTime:
-          $ref: "#/components/schemas/dateTime"
-          description: The intended arrival time, at the `to place`. When the **startTime** is not set, and **endTime** is set, it is an implicit request for an arrival time guarantee.
-
     travelSpecification:
       x-tm: TRAVEL SPECIFICATION
       type: object
@@ -2029,10 +1953,6 @@ components:
             description: Whether this traveler's identity and properties have been verified by the MaaS provider
           age:
             $ref: "#/components/schemas/shortInt"
-            description: Age of the traveler, may be approximate
-          gender:
-            type: string
-            enum: [ 'male', 'female', 'x' ]
             description: Age of the traveler, may be approximate
           fullName:
             $ref: "#/components/schemas/normalString"
@@ -2253,6 +2173,7 @@ components:
         mapping:
           INDIVIDUAL_TRAVELLER: "#/components/schemas/individualTraveller"
           USER_PROFILE: "#/components/schemas/userProfile"
+          COMPANION_PROFILE: "#/components/schemas/companionProfile"
           COMMERCIAL_PROFILE: "#/components/schemas/commercialProfile"
           ENTITLEMENT: "#/components/schemas/entitlementGiven"
           CARD_TYPE: "#/components/schemas/cardType"

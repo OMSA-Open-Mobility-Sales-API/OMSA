@@ -1,0 +1,76 @@
+{ "type": "package",
+  "id": booking.id,
+  "from": booking.trips[0].legs[0].timedLeg.start.stopPlaceRef.stopPlaceRef,
+  "to": booking.trips[-1].legs[-1].timedLeg.end.stopPlaceRef.stopPlaceRef,
+  "startTime": booking.trips[0].legs[0].timedLeg.start.serviceDeparture.timetabledTime,
+  "endTime": booking.trips[-1].legs[-1].timedLeg.end.serviceArrival.timetabledTime,
+  "status": "offered",
+  "price": { "amount": booking.confirmedPrice.amount, "currencyCode": booking.confirmedPrice.currency },
+  "offers": [ $map(booking.bookedOffers, function($o) {
+    {
+        "id": $o.offerId,
+        "type": "offer",
+        "properties": {
+            "price": { "amount": $sum($o.fares.prices.amount / 100), 
+                       "currencyCode": $o.fares[0].prices[0].currency
+                     },
+            "summary": $o.summary,
+            "legs": $map($o.admissions, function($adm){
+                {
+                    "type": "leg",
+                    "id": $adm.id,
+                    "mode": "RAIL"
+                }
+            }),
+            "ancillaries": $map($o.ancillaries, function($anc){
+                {
+                    "ancillaryId": $anc.id,
+                    "name": $anc.summary,
+                    "type": "ancillary",
+                    "links": []
+                }
+            }),
+            "products": $map($o.products, function($prod){
+                {
+                    "productId": $prod.id,
+                    "productName": $prod.summary,
+                    "type": "product",
+                    "links": []
+                }
+            })
+        }
+    }
+  })],
+  "travellers": [
+      $map(booking.passengers, function($p){ 
+          {
+              "type": "INDIVIDUAL_TRAVELLER",
+              "id": $p.id,
+              "customerReference": $p.externalRef,
+              "age": $p.age,
+              "gender": $p.gender ~> $lowercase(),
+              "cards": [ 
+                $map($p.cards, function($c){ { "type": "card",  "cardType": "TRAVEL", "cardNumber": $c.number, "additionalNumber": $c.code } })
+                ,
+                {
+                    "type": "card",
+                    "cardType": "ID",
+                    "cardNumber": $p.identificationCard.id, 
+                    "endValidity": $p.identificationCard.expirationDate,
+                    "country": $p.identificationCard.issuingCountryCode
+                }
+                
+               ],
+              "fullName": $p.detail.firstName & ' ' & $p.detail.lastName
+          } 
+      })
+  ],
+  "links": [
+                { "rel": "purchase", "href": "/processes/purchase-package/execute", "method": "POST" 
+                 , "body": { "inputs": { "packageId": booking.id } } 
+                 },
+                 { "rel": "release", "href": "/processes/release-package/execute", "method": "POST" 
+                 , "body": { "inputs": { "packageId": booking.id } } 
+                 }
+  ]
+}

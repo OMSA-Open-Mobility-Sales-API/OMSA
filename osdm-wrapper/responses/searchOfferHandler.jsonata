@@ -1,0 +1,35 @@
+{ "type": "OfferCollection",
+  "offers":
+$map($, function($o) {  
+    {
+        "type": "offer",
+        "id": $o.offerId,
+        "properties": {
+            "type": "offer",
+            "id": $o.offerId,
+            "summary": {
+                "class": $o.offerSummary.overallTravelClass
+            },
+            "products": $map($o.products, function($p) {
+                { 
+                    "type": "product",
+                    "id": $p.id,
+                    "productName": $p.code
+                } 
+            }),
+            "price": {
+                "amount": $o.minimalPrice.amount,
+                "currencyCode": $o.minimalPrice.currency
+            }
+        }
+    } 
+} )
+  "links": 
+$map($._links[rel='next' or rel='previous'], function($l){
+    {
+        "rel": "$l.rel",
+        "href": "$l.href",
+        "type": "application/json"
+    }
+})
+}

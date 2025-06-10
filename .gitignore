@@ -1,3 +1,4 @@
+osdm-wrapper/node_modules/*
 bob-wrapper/node_modules/*
 example-omsa-server/__pycache__
 example-omsa-server/Include

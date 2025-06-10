@@ -1,0 +1,7 @@
+{
+    "searchOfferHandler": "POST /offers",
+    "selectOfferHandler": ["POST /bookings/{bookingId}/booked-offers", "GET /bookings/{bookingId}"],
+    "purchasePackageRequest": ["POST /bookings/{bookingId}/fulfillments", "GET /bookings/{bookingId}"],
+    "landingPage": "none",
+    "datasources": "none"
+}

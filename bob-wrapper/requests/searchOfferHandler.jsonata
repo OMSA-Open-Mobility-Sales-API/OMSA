@@ -51,12 +51,8 @@
     }
   ],
   "temporal": {
-    "startOfValidity": "1985-04-12T23:20:50.52Z",
-    "endOfValidity": "1985-04-12T23:20:50.52Z",
-    "requestedRelativeValidity": "P30D",
-    "requestedAbsoluteValidity": "20220301/P90D",
-    "earliestDeparture": "1985-04-12T23:20:50.52Z",
-    "latestArrival": "1985-04-12T23:20:50.52Z"
+    "startOfValidity": "inputs.specification.startTime",
+    "endOfValidity": "inputs.specification.endTime"
   },
   "isPartOfInternationalTrip": false
 }

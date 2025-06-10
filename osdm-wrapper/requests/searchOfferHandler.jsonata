@@ -1,0 +1,27 @@
+{
+  "tripSearchCriteria": {
+    "departureTime": "inputs.specification.startTime",
+    "arrivalTime": "inputs.specification.endTime",
+    "origin": {
+      "objectType": "StopPlaceRef",
+      "stopPlaceRef": "inputs.specification.from"
+    },
+    "destination": {
+      "objectType": "StopPlaceRef",
+      "stopPlaceRef": "inputs.specification.to"
+    }    
+  },
+  "offerSearchCriteria": {
+    "travelClasses": [
+      "inputs.travellers[0].requirements[type=service].class"
+    ]
+  },
+  "anonymousPassengerSpecifications": $map(inputs.travellers, 
+    function($t) 
+    {
+      "externalRef": "$t.customerReference",
+      "age": $t.age,
+      "type": "PERSON",
+      "gender": $t.gender"
+    })
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "rel": "urn:uic:stn",
+    "href": "https://opendata.rijdendetreinen.nl/public/stations/stations-2023-09.csv",
+    "type": "application/csv",
+    "method": "GET",
+    "description": "UIC station codes for the Nethelands"
+  }
+]
