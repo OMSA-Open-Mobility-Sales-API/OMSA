@@ -13225,8 +13225,7 @@ components:
         Result of a product search
       required:
         - productTagNames
-        - productTagGroupNames
-        - productTagGroupings
+        - productTagGroups
       properties:
         productTagNames:
           type: array

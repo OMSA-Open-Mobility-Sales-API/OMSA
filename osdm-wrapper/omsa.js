@@ -54,7 +54,7 @@ function addPost(baseRoutePath, methods) {
 
             app.post(routePath, (req, res) => {
                 const data = req.body;
-                data.bbox = req.params.bbox ? req.params.bbox : [0,0,1,1];
+                // data.bbox = req.params.bbox ? req.params.bbox : [0,0,1,1];
 
                 fs.readFile(requestPath, 'utf8', (err, expressionText) => {
                     if (err) {
@@ -74,37 +74,13 @@ function addPost(baseRoutePath, methods) {
                             }
 
                             if (url instanceof Array){
-                                result1 = await callUrl(url[0]);
-                                res.json(await callUrl(url[1]));
+                                result1 = postToOSDM(url[0], body)
+                                result2 = postToOSDM(url[1], "{}")
+                                res.json(result2, body);
                                 return;
                             }
 
-                            result = callUrl(url);
-
-                            // if (url.includes("{") ) {
-                            //     const match = url.match(/{([^}]+)}/);
-                            //     if (match) {
-                            //         toFind = match[1];
-                            //     }
-                            //     id = data.inputs[toFind];
-                            //     url = url.replace(/{(\w+)}/g, id);
-                            // }
-
-                            // url = url.replace('POST ', '').replace('GET ', '');
-
-                            // result = await postToOSDM(url, body)
-                            //     .then( a => 
-                            //         {
-                            //             v16result = a.data;
-                            //             fs.readFile(responsePath, 'utf8', (err, responseJsonata) => {
-                            //                 (async() => {
-                            //                     const responseExpression = jsonata(responseJsonata);
-                            //                     result = await responseExpression.evaluate(v16result);
-                            //                     return result;
-                            //                 })()}
-                            //             ) 
-                            //         } );
-                            res.json(result);
+                            callUrl(url, responsePath, res);
                         })()
                     } catch (e) {
                         res.status(400).json({ error: `Fout in JSONata expressie: ${e.message}` });
@@ -122,7 +98,7 @@ function addPost(baseRoutePath, methods) {
     }
 }
 
-async function callUrl(url) {
+async function callUrl(url, responsePath, res) {
     if (url.includes("{") ) {
         const match = url.match(/{([^}]+)}/);
         if (match) {
@@ -134,19 +110,15 @@ async function callUrl(url) {
 
     url = url.replace('POST ', '').replace('GET ', '');
 
-    result = await postToOSDM(url, body)
-        .then( a => 
-            {
-                v16result = a.data;
-                fs.readFile(responsePath, 'utf8', (err, responseJsonata) => {
-                    (async() => {
-                        const responseExpression = jsonata(responseJsonata);
-                        result = await responseExpression.evaluate(v16result);
-                        return result;
-                    })()}
-                ) 
-            } );
-    res.json(result);
+    result = await postToOSDM(url, body);
+
+    fs.readFile(responsePath, 'utf8', (err, responseJsonata) => {
+        (async() => {
+            const responseExpression = jsonata(responseJsonata);
+            const resp = await responseExpression.evaluate(result.data);
+            res.json(resp);
+        })()}
+    ) 
 }
 
 function addGet(routePath, methods) {

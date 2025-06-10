@@ -7,7 +7,7 @@ const app = express();
 const port = 3001;
 
 // Laad en dereference de OpenAPI spec
-const openapiPath = path.join(__dirname, 'BoB-Product-360.yaml');
+const openapiPath = path.join(__dirname, 'OSDM-360.yaml');
 
 SwaggerParser.dereference(openapiPath)
   .then(openapi => {
@@ -32,6 +32,8 @@ SwaggerParser.dereference(openapiPath)
               example = first.value || null;
             } else if (content?.schema?.example) {
               example = content.schema.example;
+            } else if (content == null) {
+              example = null
             } else if (content.schema) {
               try {
                 example = OpenAPISampler.sample(content.schema, { skipReadOnly: true });
@@ -56,20 +58,23 @@ SwaggerParser.dereference(openapiPath)
 
             switch (method.toLowerCase()) {
             case 'get':
-                app.get( '/v1' + realRoute, handler);
+                app.get(realRoute, handler);
                 break;
             case 'post':
-                app.post('/v1' + realRoute, handler);
+                app.post(realRoute, handler);
                 break;
             case 'put':
-                app.put('/v1' + realRoute, handler);
+                app.put(realRoute, handler);
                 break;
             case 'delete':
-                app.delete('/v1' + realRoute, handler);
+                app.delete(realRoute, handler);
+                break;
+            case 'patch':
+                app.patch(realRoute, handler);
                 break;
             }
 
-            console.log(`📡 Endpoint aangemaakt: [${method.toUpperCase()}] /v1${realRoute} → voorbeeld response (${statusCode})`);
+            console.log(`📡 Endpoint aangemaakt: [${method.toUpperCase()}] ${realRoute} → voorbeeld response (${statusCode})`);
         }
       }
     }

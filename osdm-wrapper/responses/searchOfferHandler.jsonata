@@ -1,6 +1,6 @@
 { "type": "OfferCollection",
-  "offers":
-$map($, function($o) {  
+  "offers": [
+$map(offers, function($o) {  
     {
         "type": "offer",
         "id": $o.offerId,
@@ -18,18 +18,18 @@ $map($, function($o) {
                 } 
             }),
             "price": {
-                "amount": $o.minimalPrice.amount,
-                "currencyCode": $o.minimalPrice.currency
+                "amount": $o.offerSummary.minimalPrice.amount,
+                "currencyCode": $o.offerSummary.minimalPrice.currency
             }
         }
     } 
-} )
-  "links": 
+} ) ],
+  "links": [
 $map($._links[rel='next' or rel='previous'], function($l){
     {
-        "rel": "$l.rel",
-        "href": "$l.href",
+        "rel": $l.rel,
+        "href": $l.href,
         "type": "application/json"
     }
-})
+}) ]
 }
