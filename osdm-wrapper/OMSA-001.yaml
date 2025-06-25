@@ -2562,31 +2562,31 @@ components:
 
     card:
       x-tm: CUSTOMER PAYMENT MEANS, MEDIUM APPLICATION INSTANCE
-      allOf:
-      - $ref: "#/components/schemas/cardType"
-      - type: object
-        description: Any kind of card that isn't a license, only provide the cards that are required
-        required:
-          - type
-          - cardNumber
-        properties:
-          type:
-            type: string
-            enum: [ card ]
-          cardNumber:
-            $ref: "#/components/schemas/shortString"
-            description: number of the card, like ID number, credit card or bank account number
-          description:
-            $ref: "#/components/schemas/shortString"
-            description: description of the card
-          additionalNumber:
-            $ref: "#/components/schemas/shortString"
-            description: additional number, like CVC code or IBAN code
-          endValidity:
-            $ref: "#/components/schemas/date"
-            description: this card is valid until this date
-          country:
-            $ref: "#/components/schemas/country"
+      type: object
+      description: Any kind of card that isn't a license, only provide the cards that are required
+      required:
+        - type
+        - cardNumber
+      properties:
+        type:
+          type: string
+          enum: [ card ]
+        cardType:
+          $ref: "#/components/schemas/cardType"
+        cardNumber:
+          $ref: "#/components/schemas/shortString"
+          description: number of the card, like ID number, credit card or bank account number
+        description:
+          $ref: "#/components/schemas/shortString"
+          description: description of the card
+        additionalNumber:
+          $ref: "#/components/schemas/shortString"
+          description: additional number, like CVC code or IBAN code
+        endValidity:
+          $ref: "#/components/schemas/date"
+          description: this card is valid until this date
+        country:
+          $ref: "#/components/schemas/country"
 
     cardType:
       allOf:
@@ -2605,18 +2605,18 @@ components:
           type:
             type: string
             enum: [ card_type ]
-          cardType:
+          cardCategory:
             type: string
-            description: The broad category of card<br>
+            description: The category of card<br>
               DISCOUNT - discount card, can be applied in the purchase process to get rebate<br>
               TRAVEL - (external) travel card, possibly paid for in other context, but also monthly, weekly or day-cards<br>
               BANK - bank card<br>
               CREDIT - credit card<br>
               ID - identification card, like an ID card<br>
               PASSPORT - passport to identify yourself<br>
-              OTHER - unspecified
+              OTHER - unspecified, use 'subCategory' to specify the category of card
             enum: [discount, travel, bank, credit, id, passport, other]
-          subType:
+          subCategory:
             $ref: "#/components/schemas/shortString"
             description: For use in case of OTHER. Can be used in bilateral agreements.
           relatedProduct:
@@ -2630,21 +2630,21 @@ components:
 
     license:
       x-tm: ACCEPTED DRIVER PERMIT
-      allOf:
-        - $ref: "#/components/schemas/licenseType"
-        - type: object
-          description: driver or usage license for a specific user. Contains the number and the assetType you're allowed to operate (e.g. driver license for CAR)
-          required:
-            - number
-            - type
-          properties:
-            type:
-              type: string
-              enum: [ license ]
-            licenseNumber:
-              $ref: "#/components/schemas/shortString"
-            endValidity:
-              $ref: "#/components/schemas/date"
+      type: object
+      description: driver or usage license for a specific user. Contains the number and the assetType you're allowed to operate (e.g. driver license for CAR)
+      required:
+        - number
+        - type
+      properties:
+        type:
+          type: string
+          enum: [ license ]
+        licenseType:
+          $ref: "#/components/schemas/licenseType"
+        licenseNumber:
+          $ref: "#/components/schemas/shortString"
+        endValidity:
+          $ref: "#/components/schemas/date"
 
     licenseType:
       allOf:
