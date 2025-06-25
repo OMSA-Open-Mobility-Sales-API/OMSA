@@ -1941,7 +1941,6 @@ components:
           - id
           - type
         description: A generic description of a traveler, not including any identifying information
-        additionalProperties: true
         properties:
           id:
             $ref: "#/components/schemas/travellerReference"
@@ -1959,6 +1958,8 @@ components:
             description: the name of the traveller, can be used to validate against ID cards
           customerReference:
             $ref: "#/components/schemas/customerReference"
+          customFields:
+            $ref: '#/components/schemas/customProperties'
 
     travelParty:
       x-tm: ACCESS RIGHT PARAMETER ASSIGNMENT
@@ -2594,7 +2595,6 @@ components:
       - x-tm: TYPE OF PAYMENT METHOD, MEDIUM ACCESS DEVICE
         type: object
         description: A generic description of a CARD
-        additionalProperties: true
         required:
           - type
           - id
@@ -2627,6 +2627,8 @@ components:
             description: references to accepting parties, only if applicable
             items:
               $ref: "#/components/schemas/organisationReference"
+          customFields:
+            $ref: '#/components/schemas/customProperties'
 
     license:
       x-tm: ACCEPTED DRIVER PERMIT
@@ -2652,7 +2654,6 @@ components:
       - x-tm: TYPE OF DRIVER PERMIT
         type: object
         description: A category of license to use a certain asset class
-        additionalProperties: true
         required:
           - mode
           - type
@@ -2669,6 +2670,8 @@ components:
             description: in most countries a driver license has also a code. As TO you can exactly verify, based on this code if the license allows to operate it's assets, if the assetType too generic.
           issuingCountry:
             $ref: "#/components/schemas/country"
+          customFields:
+            $ref: '#/components/schemas/customProperties'
 
     guarantee:
       type: object
@@ -3132,7 +3135,6 @@ components:
 
     financialDetail:
       type: object
-      additionalProperties: true
       properties:
         amount:
           $ref: '#/components/schemas/amountOfMoney'
@@ -3146,6 +3148,8 @@ components:
           $ref: '#/components/schemas/paymentCategory'
         expirationDate:
           $ref: '#/components/schemas/dateTime'
+        customFields:
+          $ref: '#/components/schemas/customProperties'
 
     paymentCategory:
       type: string
