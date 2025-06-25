@@ -739,7 +739,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+                #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/landingPage.yaml' 
             text/html:
               schema:
                 type: string
@@ -784,7 +785,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+                # $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/confClasses.yaml'
             text/html:
               schema:
                 type: string
@@ -817,7 +819,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml'
+                # $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-geodata/collections.yaml'
         default:
           $ref: '#/components/responses/errorResponse'
   /collections/{collectionId}:
@@ -843,7 +846,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml'
+                #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-geodata/collectionInfo.yaml'
             text/html:
               schema:
                 type: string
@@ -878,7 +882,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/processList.yaml'
+                #$ref: 'https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/processList.yaml'
+                $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/processes-core/processList.yaml'
         default:
           $ref: '#/components/responses/errorResponse'
   /processes/{processID}:
@@ -929,7 +934,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/process.yaml"
+                #$ref: "https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/process.yaml"
+                $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/processes-core/process.yaml'
         default:
           $ref: '#/components/responses/errorResponse'
 
@@ -1024,7 +1030,8 @@ components:
       content:
         application/json:
           schema:
-            $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+            #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+            $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/common-core/landingPage.yaml'
     conformanceDeclarationResponse:
       description: |-
         The URIs of all conformance classes supported by the server.
@@ -1036,7 +1043,8 @@ components:
       content:
         application/json:
           schema:
-            $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+            #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+            $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/confClasses.yaml'
         text/html:
           schema:
             type: string
@@ -1205,7 +1213,8 @@ components:
     subscriber:
       type: object
       externalDocs:
-        url: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/subscriber.yaml
+        # url: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/subscriber.yaml
+        url: https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/processes-core/subscriber.yaml
       description: |-
         Optional URIs for callbacks for this job.
 
@@ -3190,8 +3199,7 @@ components:
 
     # referenced data
     externalReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     organisationReference:
       type: object
@@ -3222,12 +3230,10 @@ components:
           $ref: "#/components/schemas/normalString"
 
     customerReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     travellerReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     productReference:
       type: object
@@ -3372,8 +3378,7 @@ components:
       type: object
       additionalProperties: false
       x-externalDocs:
-        url: >-
-          http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/link.yaml
+        url: https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/link.yaml
       required:
         - href
         - rel
