@@ -2605,7 +2605,7 @@ components:
           type:
             type: string
             enum: [ card_type ]
-          cardType:
+          cardCategory:
             type: string
             description: The broad category of card<br>
               DISCOUNT - discount card, can be applied in the purchase process to get rebate<br>
@@ -2616,7 +2616,7 @@ components:
               PASSPORT - passport to identify yourself<br>
               OTHER - unspecified
             enum: [discount, travel, bank, credit, id, passport, other]
-          subType:
+          subCategory:
             $ref: "#/components/schemas/shortString"
             description: For use in case of OTHER. Can be used in bilateral agreements.
           relatedProduct:
