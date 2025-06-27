@@ -768,20 +768,7 @@ paths:
         - $ref: '#/components/headers/contentLanguage'
       responses:
         '200':
-          description: successful operation
-          headers:
-            Content-Language:
-              $ref: '#/components/headers/contentLanguage'
-            Version:
-              $ref: '#/components/headers/version'
-          content:
-            application/json:
-              schema:
-                #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
-                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/landingPage.yaml' 
-            text/html:
-              schema:
-                type: string
+          $ref: "#/components/responses/landingPageResponse"
         default:
           $ref: '#/components/responses/errorResponse'
   /api:
@@ -814,20 +801,7 @@ paths:
       operationId: getConformanceDeclaration
       responses:
         '200':
-          description: successful response
-          headers:
-            Content-Language:
-              $ref: '#/components/headers/contentLanguage'
-            Version:
-              $ref: '#/components/headers/version'
-          content:
-            application/json:
-              schema:
-                # $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
-                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/confClasses.yaml'
-            text/html:
-              schema:
-                type: string
+          $ref: "#/components/responses/conformanceDeclarationResponse"
         default:
           $ref: '#/components/responses/errorResponse'
       summary: API conformance definition
@@ -857,8 +831,7 @@ paths:
           content:
             application/json:
               schema:
-                # $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml'
-                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-geodata/collections.yaml'
+                $ref: '#/components/schemas/collections'
         default:
           $ref: '#/components/responses/errorResponse'
   /collections/{collectionId}:
@@ -884,8 +857,7 @@ paths:
           content:
             application/json:
               schema:
-                #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml'
-                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-geodata/collectionInfo.yaml'
+                $ref: "#/components/schemas/collectionInfo"
             text/html:
               schema:
                 type: string
@@ -920,8 +892,7 @@ paths:
           content:
             application/json:
               schema:
-                #$ref: 'https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/processList.yaml'
-                $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/processes-core/processList.yaml'
+                $ref: '#/components/schemas/processList'
         default:
           $ref: '#/components/responses/errorResponse'
   /processes/{processID}:
@@ -972,8 +943,9 @@ paths:
           content:
             application/json:
               schema:
-                #$ref: "https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/process.yaml"
-                $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/processes-core/process.yaml'
+                type: object
+                externalDocs:
+                  url: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/processes-core/process.yaml'
         default:
           $ref: '#/components/responses/errorResponse'
 
@@ -1058,6 +1030,7 @@ components:
                 maxItems: 10
                 items:
                   $ref: '#/components/schemas/error'
+
     landingPageResponse:
       description: The reponse containing a landing page
       headers:
@@ -1068,8 +1041,11 @@ components:
       content:
         application/json:
           schema:
-            #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
-            $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/common-core/landingPage.yaml'
+            $ref: '#/components/schemas/landingPage'
+        text/html:
+          schema:
+            type: string
+
     conformanceDeclarationResponse:
       description: |-
         The URIs of all conformance classes supported by the server.
@@ -1078,10 +1054,14 @@ components:
         OGC API Features implementations - and not "just" a specific
         API / server, the server declares the conformance
         classes it implements and conforms to.
+      headers:
+        Content-Language:
+          $ref: '#/components/headers/contentLanguage'
+        Version:
+          $ref: '#/components/headers/version'
       content:
         application/json:
           schema:
-            #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
             $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/confClasses.yaml'
         text/html:
           schema:
@@ -1251,7 +1231,6 @@ components:
     subscriber:
       type: object
       externalDocs:
-        # url: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/subscriber.yaml
         url: https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/processes-core/subscriber.yaml
       description: |-
         Optional URIs for callbacks for this job.
@@ -1600,34 +1579,6 @@ components:
               items:
                 $ref: "#/components/schemas/basePoint"
 
-    geojsonGeometry:
-      type: object
-      discriminator:
-        propertyName: type
-        mapping:
-          Point: "#/components/schemas/geojsonPoint"
-          LineString: "#/components/schemas/geojsonLine"
-          Polygon: "#/components/schemas/geojsonPolygon"
-          MultiPolygon: "#/components/schemas/geojsonMultiPolygon"
-      description: geoJSON geometry
-      required:
-        - type
-      properties:
-        type:
-          type: string
-          enum: ["Point", "LineString", "Polygon", "MultiPolygon"]
-
-    geojsonCustomFeatureProperties:
-      allOf:
-      - $ref: "#/components/schemas/customProperties"
-      - type: object
-        required:
-          - type
-        properties:
-          type:
-            type: string
-            enum: [ custom ]
-
     geojsonFeature:
       type: object
       required:
@@ -1943,7 +1894,6 @@ components:
           none, # OTHER
         ]
 
-    # Transmodel based objects
     mode:
       x-tm: 
       - concept: MODE
@@ -2150,21 +2100,6 @@ components:
           $ref: "#/components/schemas/longString"
           description: additional information to find the address (f.x. just around the corner)
 
-    packageLabel:
-      type: string
-      enum:
-        [
-          CHEAPEST,
-          MOST_FLEXIBLE,
-          NON_FLEXIBLE,
-          MOST_ECO_FRIENDLY,
-          FASTEST,
-          SHORTEST,
-          REFUNDABLE,
-          EXCHANGABLE,
-          CANCELLABLE
-        ]
-
     packageStatus:
       x-tm: CUSTOMER PURCHASE STATUS
       type: string
@@ -2218,37 +2153,6 @@ components:
           cancelled,
           abended
         ]
-
-    # geojson properties
-    ancillaries:
-      type: object
-      description: the featurecollection properties of 'ancillaries'
-      required:
-        - type
-      properties:
-        type:
-          type: string
-          enum: [ ancillaries ]
-
-    refundOptions:
-      type: object
-      description: the featurecollection properties of 'refund-options'
-      required:
-        - type
-      properties:
-        type:
-          type: string
-          enum: [ refund-options ]
-
-    assets:
-      type: object
-      description: the featurecollection properties of 'assets'
-      required:
-        - type
-      properties:
-        type:
-          type: string
-          enum: [ assets ]
 
     # usages
     usage:
@@ -2979,37 +2883,6 @@ components:
           items:
             $ref: "#/components/schemas/financialDetail"
 
-    assetState:
-      x-tm: lacking
-      type: object
-      description: the state of the asset, where is it, etc
-      additionalProperties: false
-      properties:
-        mileage:
-          $ref: "#/components/schemas/float"
-          description: the current mileage of the asset, in km
-        stateOfCharge:
-          $ref: "#/components/schemas/shortInt"
-          description: percentage of charge available / fuel level (battery, petrol tank)
-        maxRange:
-          $ref: "#/components/schemas/float"
-          description: maximum range in meters
-
-    cargoLimits:
-      x-tm: LUGGAGE ALLOWANCE
-      type: object
-      description: applicable properties to specify cargo space/loads
-      properties:
-        description:
-          $ref: "#/components/schemas/longString"
-          description: describes options to carry cargo, should match Content-Language
-        volume:
-          $ref: "#/components/schemas/normalInt"
-          description: the volume in liters of the cargo
-        weight:
-          $ref: "#/components/schemas/normalInt"
-          description: the weight in kilograms of the cargo
-
     country:
       type: string
       description: two-letter country codes according to ISO 3166-1
@@ -3031,65 +2904,6 @@ components:
         maxLength: 1000
         maxProperties: 20
 
-    damage:
-      x-tm: lacking
-      type: object
-      description: A damage of the asset.
-      additionalProperties: false
-      required:
-        - assetComponent
-        - description
-      properties:
-        assetComponent:
-          type: string
-          description: Part/Component of the asset affected. If OTHER is specified the description needs to provide more detail as to what part/component is affected.<br>
-          enum:
-            [
-              front,
-              rear,
-              left,
-              right,
-              top,
-              bottom,
-              interior,
-              tire,
-              ancillary,
-              other,
-            ]
-        description:
-          $ref: "#/components/schemas/longString"
-          description: Description of the damage.
-        pictures:
-          type: array
-          description: URL where pictures of the damage can be accessed. Any special characters in the URL must be correctly escaped.
-          maxItems: 10
-          items:
-            $ref: "#/components/schemas/url"
-
-    ecoValues:
-      x-tm: lacking
-      type: object
-      description: applicable properties to specify ecological/environmental aspects. Derived from GBFS.
-      properties:
-        energyLabel:
-          type: string
-          description: Energy efficiency label
-          enum: [A, B, C, D, E]
-        ecoLabel:
-          type: array
-          description: see https://github.com/MobilityData/gbfs/blob/v2.3/gbfs.md
-          maxItems: 3
-          items:
-            type: object
-            properties:
-              ecoSticker:
-                $ref: "#/components/schemas/shortString"
-              countryCode:
-                $ref: "#/components/schemas/country"
-        co2Emission:
-          $ref: "#/components/schemas/float"
-          description: the emission of grammes CO2 per km
-
     placeDefinitions:
       type: object
       properties:
@@ -3100,29 +2914,6 @@ components:
           maxItems: 3
           items:
             $ref: "#/components/schemas/postalAddress"
-
-    appSupport:
-      x-tm: lacking
-      type: object
-      description: attributes to display/use in an external app.
-      properties:
-        displayName:
-          $ref: "#/components/schemas/shortString"
-          description: displayable name for this asset
-        description:
-          $ref: "#/components/schemas/longString"
-          description: the description of the asset
-        image:
-          $ref: "#/components/schemas/url"
-          description: Link to an image of the asset
-        icon:
-          $ref: "#/components/schemas/url"
-          description: Link to an icon of the asset
-        accessMethods:
-          type: array
-          items:
-            $ref: "#/components/schemas/typeOfTravelDocument"
-          description: how this asset can be opened
 
     binaryTicket:
       allOf:
@@ -3157,42 +2948,6 @@ components:
           type:
             type: string
             enum: [ digital_ticket ]
-
-    eKey:
-      x-tm: TRAVEL DOCUMENT
-      description: Axa EKey information
-      type: object
-      required:
-        - ekey
-        - lock
-      properties:
-        ekey:
-          type: object
-          additionalProperties: false
-          properties:
-            key:
-              $ref: "#/components/schemas/longString"
-              description: certificate
-            passkey:
-              $ref: "#/components/schemas/longString"
-              description: one time pass key
-        lock:
-          type: object
-          additionalProperties: false
-          properties:
-            bdAddress:
-              $ref: "#/components/schemas/longString"
-              description: physical address
-            deviceName:
-              $ref: "#/components/schemas/normalString"
-              description: how it advertises itself
-
-    otherAccessInfo:
-      x-tm: 
-      - concept: lacking
-      description: Generic travelDocument, non-standardized (yet)
-      allOf:
-      - $ref: "#/components/schemas/customProperties"
 
     financialDetail:
       type: object
@@ -3416,15 +3171,192 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/link'
-    links:
+
+    landingPage:
       type: object
-      x-externalDocs:
-        url: https://en.wikipedia.org/wiki/Hypertext_Application_Language
+      required:
+        - links
+      properties:
+        title:
+          type: string
+          example: Example processing server
+        description:
+          type: string
+          example: Example server implementing the OGC API - Processes 1.0 Standard
+        attribution:
+          type: string
+          title: attribution for the Processes API
+          description: The `attribution` should be short and intended for presentation to a user, for example, in a corner of a map. Parts of the text can be links to other resources if additional information is needed. The string can include HTML markup.
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/link'
+
+    collections:
+      type: object
+      required:
+        - links
+        - collections
       properties:
         links:
           type: array
           items:
             $ref: '#/components/schemas/link'
+        timeStamp:
+          type: string
+          format: date-time
+        numberMatched:
+          type: integer
+          minimum: 0
+          example: 1
+        numberReturned:
+          type: integer
+          minimum: 0
+          example: 1
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/collectionInfo'
+
+    collectionInfo:
+      type: object
+      required:
+        - id
+        - links
+      properties:
+        id:
+          type: string
+          description: identifier of the collection used, for example, in URIs
+          example: dem
+        title:
+          type: string
+          description: human readable title of the collection
+          example: Digital Elevation Model
+        description:
+          type: string
+          description: a description of the data in the collection
+          example: A Digital Elevation Model.
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/link'
+        extent:
+          $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/common-geodata/extent-uad.yaml'
+        itemType:
+          description: indicator about the type of the items in the collection if the collection has an accessible /collections/{collectionId}/items endpoint
+          type: string
+          default: unknown
+        crs:
+          description: the list of coordinate reference systems supported by the API; the first item is the default coordinate reference system
+          type: array
+          items:
+            type: string
+          default:
+            - http://www.opengis.net/def/crs/OGC/1.3/CRS84
+          example:
+            - http://www.opengis.net/def/crs/OGC/1.3/CRS84
+            - http://www.opengis.net/def/crs/EPSG/0/4326
+        dataType:
+          allOf:
+            - description: Type of data represented in the collection
+            - $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/common-geodata/dataType.yaml'
+        geometryDimension:
+          description: 'The geometry dimension of the features shown in this layer (0: points, 1: curves, 2: surfaces, 3: solids), unspecified: mixed or unknown'
+          type: integer
+          minimum: 0
+          maximum: 3
+        minScaleDenominator:
+          description: Minimum scale denominator for usage of the collection
+          type: number
+        maxScaleDenominator:
+          description: Maximum scale denominator for usage of the collection
+          type: number
+        minCellSize:
+          description: Minimum cell size for usage of the collection
+          type: number
+        maxCellSize:
+          description: Maximum cell size for usage of the collection
+          type: number
+
+    processList:
+      type: object
+      required:
+        - processes
+        - links
+      properties:
+        processes:
+          type: array
+          items:
+            $ref: "#/components/schemas/processSummary"
+        links:
+          type: array
+          items:
+            $ref: "#/components/schemas/link"
+
+    processSummary:
+      allOf:
+      - $ref: "#/components/schemas/descriptionType"
+      - type: object
+        required:
+          - id
+          - version
+        properties:
+          id:
+            type: string
+          version:
+            type: string
+          jobControlOptions:
+            type: array
+            items:
+              $ref: "#/components/schemas/jobControlOptions"
+          links:
+            type: array
+            items:
+              $ref: "#/components/schemas/link"
+
+    jobControlOptions:
+      type: string
+      enum:
+        - sync-execute
+        - async-execute
+        - dismiss    
+
+    descriptionType:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        keywords:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: array
+          items:
+            $ref: "#/components/schemas/metadata"
+
+    metadata:
+      oneOf:
+      - allOf:
+        - $ref: "#/components/schemas/link"
+        - type: object
+          properties:
+            role:
+              type: string
+      - type: object
+        properties:
+          role:
+              type: string
+          title:
+              type: string
+          lang:
+              type: string
+          value:
+            oneOf:
+              - type: string
+              - type: object
     link:
       type: object
       additionalProperties: false
@@ -3539,12 +3471,6 @@ components:
       type: string
       description: short string, display names (length 0-75)
       maxLength: 75
-    time:
-      type: string
-      x-format: partial-time
-      description: >-
-        https://www.rfc-editor.org/rfc/rfc3339#section-5.6, partial-time
-        ("23:59:59.3498")
     tinyInt:
       type: integer
       description: for really small numbers (0-10)
