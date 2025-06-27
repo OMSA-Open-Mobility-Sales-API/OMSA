@@ -290,7 +290,7 @@ paths:
               type: object
               properties:
                 inputs:
-                  $ref: "#/components/schemas/packageInput"
+                  $ref: "#/components/schemas/purchaseOffersInput"
                 subscriber:
                   $ref: "#/components/schemas/subscriber"
       responses:
@@ -504,7 +504,7 @@ paths:
               type: object
               properties:
                 inputs:
-                  $ref: "#/components/schemas/packageInput"
+                  $ref: "#/components/schemas/extendExpiryTimeInput"
                 subscriber:
                   $ref: "#/components/schemas/subscriber"
       responses:
@@ -844,7 +844,12 @@ paths:
       operationId: describeCollection
       description: a (machine or human) readable description of this collection
       parameters:
-        - $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/parameters/collectionId.yaml'
+        - name: collectionId
+          in: path
+          description: local identifier of a collection
+          required: true
+          schema:
+            type: string
         - $ref: '#/components/headers/contentLanguage'
       responses:
         '200':
@@ -1251,94 +1256,75 @@ components:
           type: string
           format: uri
 
-    defaultInput:
+    # Inputs
+    searchOfferInput:
       type: object
-      discriminator:
-        propertyName: type
-        mapping:
-          SEARCH_OFFER: "#/components/schemas/searchOfferInput"
-          PURCHASE: "#/components/schemas/packageInput"
-          2_PHASE_PURCHASE: "#/components/schemas/packageInput"
-          COMMIT: "#/components/schemas/packageInput"
-          RELEASE: "#/components/schemas/packageInput"
-          PURCHASE_PACKAGE: "#/components/schemas/purchasePackageInput"
-          PURCHASE_OFFERS: "#/components/schemas/purchaseOffersInput"
-          EXTEND_EXPIRY_TIME: "#/components/schemas/extendExpiryTimeInput"
       required:
+      - travellers
       - type
+      description: A package planning request, resulting in package options
       properties:
         type:
           type: string
+          pattern: "^(search_offer)"
+          enum: [ search_offer ]
+        timestamp:
+          description: timestamp of request
+          $ref: "#/components/schemas/dateTime"
+        specification:
+          allOf:
+          - $ref: "#/components/schemas/travelSpecification"
+          - $ref: "#/components/schemas/placeDefinitions"
+        pattern:
+          $ref: "#/components/schemas/tripPattern"
+        packageToExchange:
+          $ref: "#/components/schemas/packageReference"
+        travellers:
+          type: array
+          maxItems: 10
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/individualTraveller"
+        profiles:
+          type: array
+          items:
+            $ref: "#/components/schemas/userProfile"
+        travellingAssets:
+          type: array
+          items:
+            $ref: "#/components/schemas/travellingAsset"
+
+    selectOffersInput:
+      type: object
+      required:
+      - type
+      - offerIds
+      properties:
+        offerIds:
+          type: array
+          items:
+            $ref: "#/components/schemas/offerReference"
+        type: 
+          type: string
+          enum: [ select_offers ]
         timestamp:
           description: timestamp of request
           $ref: "#/components/schemas/dateTime"
 
-    # Inputs
-    searchOfferInput:
-      allOf: 
-      - $ref: "#/components/schemas/defaultInput"
-      - type: object
-        required:
-        - travellers
-        - type
-        description: A package planning request, resulting in package options
-        properties:
-          type:
-            type: string
-            pattern: "^(search_offer)"
-            enum: [ search_offer ]
-          specification:
-            allOf:
-            - $ref: "#/components/schemas/travelSpecification"
-            - $ref: "#/components/schemas/placeDefinitions"
-          pattern:
-            $ref: "#/components/schemas/tripPattern"
-          packageToExchange:
-            $ref: "#/components/schemas/packageReference"
-          travellers:
-            type: array
-            maxItems: 10
-            minItems: 1
-            items:
-              $ref: "#/components/schemas/individualTraveller"
-          profiles:
-            type: array
-            items:
-              $ref: "#/components/schemas/userProfile"
-          travellingAssets:
-            type: array
-            items:
-              $ref: "#/components/schemas/travellingAsset"
-
-    selectOffersInput:
-      allOf: 
-      - $ref: "#/components/schemas/defaultInput"
-      - type: object
-        required:
-        - type
-        - offerIds
-        properties:
-          offerIds:
-            type: array
-            items:
-              $ref: "#/components/schemas/offerReference"
-          type: 
-            type: string
-            enum: [ select_offers ]
-
     packageInput:
-      allOf: 
-      - $ref: "#/components/schemas/defaultInput"
-      - type: object
-        required:
-        - type
-        - packageId
-        properties:
-          packageId:
-            $ref: "#/components/schemas/packageReference"
-          type: 
-            type: string
-            enum: [ package ]
+      type: object
+      required:
+      - type
+      - packageId
+      properties:
+        packageId:
+          $ref: "#/components/schemas/packageReference"
+        type: 
+          type: string
+          enum: [ package ]
+        timestamp:
+          description: timestamp of request
+          $ref: "#/components/schemas/dateTime"          
 
     legInput:
       allOf: 
@@ -1362,25 +1348,6 @@ components:
          #   minItems: 1
          #   items:
          #     $ref: "#/components/schemas/link"                      
-
-    refundInput:
-      allOf: 
-      - $ref: "#/components/schemas/legInput"
-      - type: object
-        required:
-          - type
-        properties:
-          type:
-            type: string
-            enum: [ refund-option ]
-            pattern: "^(refund-option)$"
-          reason:
-            $ref: "#/components/schemas/normalString"
-          refundType:
-            type: string
-            enum: [ package_refund, remove_traveller, remove_ancillary ]
-          ancillary:
-            $ref: "#/components/schemas/ancillaryReference"
 
     refundOptionInput:
       type: object
@@ -1414,22 +1381,8 @@ components:
             - $ref: "#/components/schemas/individualTraveller"
             - $ref: "#/components/schemas/userProfile"
             - $ref: "#/components/schemas/travellingAsset"
-
-    travelSpecificationInput:
-      allOf: 
-      - $ref: "#/components/schemas/packageInput"
-      - $ref: "#/components/schemas/travelSpecification"
-      - type: object
-        required:
-          - type
-          - packageId
-        properties:
-          legId:
-            $ref: "#/components/schemas/legReference"
-          type:
-            type: string
-            pattern: "^(change_times)"
-            enum: [ change_times ]
+          discriminator:
+            propertyName: type
 
     assetInput:
       allOf: 
@@ -1463,21 +1416,9 @@ components:
           replaceAncillaryId:
             $ref: "#/components/schemas/ancillaryReference"
 
-    purchasePackageInput:
-      allOf:
-        - $ref: "#/components/schemas/searchOfferInput"
-        - type: object
-          required:
-          - type
-          properties:
-            type:
-              type: string
-              enum: [ purchase_package ]
-
     purchaseOffersInput:
       allOf:
         - $ref: "#/components/schemas/selectOffersInput"
-        - $ref: "#/components/schemas/purchasePackageInput"
         - type: object
           required:
           - type
@@ -1485,21 +1426,6 @@ components:
             type:
               type: string
               enum: [ purchase_offers ]
-
-    redressInput:
-      allOf: 
-      - $ref: "#/components/schemas/packageInput"
-      - type: object
-        required:
-        - type
-        - redressOptionId
-        properties:
-          type:
-            type: string
-            enum: [ redress ]
-            pattern: "^(redress)"
-          redressOptionId:
-            $ref: "#/components/schemas/uuid"
 
     extendExpiryTimeInput:
       allOf: 
@@ -2154,41 +2080,19 @@ components:
           abended
         ]
 
-    # usages
-    usage:
-      x-tm: USAGE PARAMETER
+    # parameters
+    travellingAsset:
       type: object
-      discriminator:
-        propertyName: type
-        mapping:
-          INDIVIDUAL_TRAVELLER: "#/components/schemas/individualTraveller"
-          USER_PROFILE: "#/components/schemas/userProfile"
-          COMMERCIAL_PROFILE: "#/components/schemas/commercialProfile"
-          ENTITLEMENT: "#/components/schemas/entitlementGiven"
-          CARD_TYPE: "#/components/schemas/cardType"
-          CARD: "#/components/schemas/card"
-          LICENSE_TYPE: "#/components/schemas/licenseType"
-          LICENSE: "#/components/schemas/license"
-          ASSET: "#/components/schemas/travellingAsset"
+      required:
+      - type
+      - id
       properties:
         type:
           type: string
-
-    # parameters
-    travellingAsset:
-      allOf:
-      - $ref: "#/components/schemas/usage"
-      - type: object
-        required:
-        - type
-        - id
-        properties:
-          type:
-            type: string
-            pattern: "^(asset)$"
-            enum: [ asset ]
-          id:
-            $ref: "#/components/schemas/assetReference"
+          pattern: "^(asset)$"
+          enum: [ asset ]
+        id:
+          $ref: "#/components/schemas/assetReference"
 
     userProfile:
       allOf:
@@ -2228,40 +2132,36 @@ components:
             type: boolean
 
     commercialProfile:
-      allOf:
-      - $ref: "#/components/schemas/usage"
-      - x-tm: COMMERCIAL PROFILE
-        required:
-        - type
-        type: object
-        properties:
-          id:
-            $ref: "#/components/schemas/shortString"
-          type:
-            type: string
-            enum: [ commercial_profile ]
-          code:
-            $ref: "#/components/schemas/shortString"
-          name:
-            $ref: "#/components/schemas/normalString"
+      x-tm: COMMERCIAL PROFILE
+      required:
+      - type
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/shortString"
+        type:
+          type: string
+          enum: [ commercial_profile ]
+        code:
+          $ref: "#/components/schemas/shortString"
+        name:
+          $ref: "#/components/schemas/normalString"
 
     entitlementGiven:
-      allOf:
-      - $ref: "#/components/schemas/usage"
-      - x-tm: ENTITLEMENT GIVEN
-        type: object
-        required:
-          - type
-          - entitlementType
-        properties:
-          id:
-            $ref: "#/components/schemas/shortString"
-            description: a unique ID for this usage. Especially required when it is a USER PROFILE or an INDIVIDUAL TRAVELLER. Other concepts might refer to this ID.
-          type:
-            type: string
-            enum: [ entitlement ]
-          entitlementType:
-            $ref: "#/components/schemas/normalString"
+      x-tm: ENTITLEMENT GIVEN
+      type: object
+      required:
+        - type
+        - entitlementType
+      properties:
+        id:
+          $ref: "#/components/schemas/shortString"
+          description: a unique ID for this usage. Especially required when it is a USER PROFILE or an INDIVIDUAL TRAVELLER. Other concepts might refer to this ID.
+        type:
+          type: string
+          enum: [ entitlement ]
+        entitlementType:
+          $ref: "#/components/schemas/normalString"
 
     # parameters
     equipmentParameter:
@@ -2551,45 +2451,43 @@ components:
           $ref: "#/components/schemas/country"
 
     cardType:
-      allOf:
-      - $ref: "#/components/schemas/usage"
-      - x-tm: TYPE OF PAYMENT METHOD, MEDIUM ACCESS DEVICE
-        type: object
-        description: A generic description of a CARD
-        required:
-          - type
-          - id
-        properties:
-          id:
-            $ref: "#/components/schemas/shortString"
-            description: external reference to address the card used.
-          type:
-            type: string
-            enum: [ card_type ]
-          cardCategory:
-            type: string
-            description: The category of card<br>
-              DISCOUNT - discount card, can be applied in the purchase process to get rebate<br>
-              TRAVEL - (external) travel card, possibly paid for in other context, but also monthly, weekly or day-cards<br>
-              BANK - bank card<br>
-              CREDIT - credit card<br>
-              ID - identification card, like an ID card<br>
-              PASSPORT - passport to identify yourself<br>
-              OTHER - unspecified, use 'subCategory' to specify the category of card
-            enum: [discount, travel, bank, credit, id, passport, other]
-          subCategory:
-            $ref: "#/components/schemas/shortString"
-            description: For use in case of OTHER. Can be used in bilateral agreements.
-          relatedProduct:
-            $ref: "#/components/schemas/productReference"
-          transportOrganisations:
-            type: array
-            maxItems: 15
-            description: references to accepting parties, only if applicable
-            items:
-              $ref: "#/components/schemas/organisationReference"
-          customFields:
-            $ref: '#/components/schemas/customProperties'
+      x-tm: TYPE OF PAYMENT METHOD, MEDIUM ACCESS DEVICE
+      type: object
+      description: A generic description of a CARD
+      required:
+        - type
+        - id
+      properties:
+        id:
+          $ref: "#/components/schemas/shortString"
+          description: external reference to address the card used.
+        type:
+          type: string
+          enum: [ card_type ]
+        cardCategory:
+          type: string
+          description: The category of card<br>
+            DISCOUNT - discount card, can be applied in the purchase process to get rebate<br>
+            TRAVEL - (external) travel card, possibly paid for in other context, but also monthly, weekly or day-cards<br>
+            BANK - bank card<br>
+            CREDIT - credit card<br>
+            ID - identification card, like an ID card<br>
+            PASSPORT - passport to identify yourself<br>
+            OTHER - unspecified, use 'subCategory' to specify the category of card
+          enum: [discount, travel, bank, credit, id, passport, other]
+        subCategory:
+          $ref: "#/components/schemas/shortString"
+          description: For use in case of OTHER. Can be used in bilateral agreements.
+        relatedProduct:
+          $ref: "#/components/schemas/productReference"
+        transportOrganisations:
+          type: array
+          maxItems: 15
+          description: references to accepting parties, only if applicable
+          items:
+            $ref: "#/components/schemas/organisationReference"
+        customFields:
+          $ref: '#/components/schemas/customProperties'
 
     license:
       x-tm: ACCEPTED DRIVER PERMIT
@@ -2610,29 +2508,27 @@ components:
           $ref: "#/components/schemas/date"
 
     licenseType:
-      allOf:
-      - $ref: "#/components/schemas/usage"
-      - x-tm: TYPE OF DRIVER PERMIT
-        type: object
-        description: A category of license to use a certain asset class
-        required:
-          - mode
-          - type
-        properties:
-          type:
-            type: string
-            enum: [ license_type ]
-          modes:
-            type: array
-            items:
-              $ref: "#/components/schemas/mode"
-          licenseCode:
-            $ref: "#/components/schemas/shortString"
-            description: in most countries a driver license has also a code. As TO you can exactly verify, based on this code if the license allows to operate it's assets, if the assetType too generic.
-          issuingCountry:
-            $ref: "#/components/schemas/country"
-          customFields:
-            $ref: '#/components/schemas/customProperties'
+      x-tm: TYPE OF DRIVER PERMIT
+      type: object
+      description: A category of license to use a certain asset class
+      required:
+        - mode
+        - type
+      properties:
+        type:
+          type: string
+          enum: [ license_type ]
+        modes:
+          type: array
+          items:
+            $ref: "#/components/schemas/mode"
+        licenseCode:
+          $ref: "#/components/schemas/shortString"
+          description: in most countries a driver license has also a code. As TO you can exactly verify, based on this code if the license allows to operate it's assets, if the assetType too generic.
+        issuingCountry:
+          $ref: "#/components/schemas/country"
+        customFields:
+          $ref: '#/components/schemas/customProperties'
 
     guarantee:
       type: object
