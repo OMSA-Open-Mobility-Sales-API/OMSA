@@ -1267,7 +1267,6 @@ components:
         type:
           type: string
           pattern: "^(search_offer)"
-          enum: [ search_offer ]
         timestamp:
           description: timestamp of request
           $ref: "#/components/schemas/dateTime"
@@ -1306,7 +1305,7 @@ components:
             $ref: "#/components/schemas/offerReference"
         type: 
           type: string
-          enum: [ select_offers ]
+          pattern: "^(select_offers)"
         timestamp:
           description: timestamp of request
           $ref: "#/components/schemas/dateTime"
@@ -1321,7 +1320,7 @@ components:
           $ref: "#/components/schemas/packageReference"
         type: 
           type: string
-          enum: [ package ]
+          pattern: "^(package)"
         timestamp:
           description: timestamp of request
           $ref: "#/components/schemas/dateTime"          
@@ -1340,7 +1339,7 @@ components:
             $ref: "#/components/schemas/legReference"
           type:
             type: string
-            enum: [ leg ]
+            pattern: "^(leg)"
           location: 
             $ref: "#/components/schemas/placeReference"
          #evidence:
@@ -1356,7 +1355,6 @@ components:
       properties:
         type:
           type: string
-          enum: [ claim_refund_option, confirm_refund_option ]
           pattern: "^(claim_refund_option|confirm_refund_option)$"
         optionId:
           $ref: "#/components/schemas/uuid"
@@ -1370,7 +1368,6 @@ components:
       properties:
         type:
           type: string
-          enum: [ traveller ]
           pattern: "^(traveller)$"
         travellerId:
           $ref: "#/components/schemas/travellerReference"
@@ -1394,7 +1391,7 @@ components:
         properties:
           type:
             type: string
-            enum: [ asset ]
+            pattern: "^(asset)$"
           assetId:
             $ref: "#/components/schemas/assetReference"
           replaceAssetId:
@@ -1410,7 +1407,7 @@ components:
         properties:
           type:
             type: string
-            enum: [ ancillary ]
+            pattern: "^(ancillary)$"
           ancillaryId:
             $ref: "#/components/schemas/ancillaryReference"
           replaceAncillaryId:
@@ -1425,7 +1422,7 @@ components:
           properties:
             type:
               type: string
-              enum: [ purchase_offers ]
+              pattern: "^(purchase_offers)$"
 
     extendExpiryTimeInput:
       allOf: 
@@ -1436,8 +1433,8 @@ components:
         properties:
           type:
             type: string
-            pattern: "^(extend_expiry_time)"
-            enum: [ extend_expiry_time ]
+            pattern: "^(extend_expiry_time)$"
+            
           extensionReason:
             type: string
             description:
@@ -1445,7 +1442,7 @@ components:
               _PURCHASE_PENDING_ - The internal purchase process on the MP side is not yet finished<br>
               _PAYMENT_PENDING_ - The customer is in the payment process<br>
               _OTHER_ - unspecified
-            enum: [ purchase_pending, payment_pending, other ]
+            pattern: "^(purchase_pending|payment_pending|other)$"
 
     # GeoJSON specs, in contradiction to the convention starting with a capital. Reason: compatibility with GeoJSON specification (types are named this way)
     basePoint:
@@ -1514,7 +1511,7 @@ components:
       properties:
         type:
           type: string
-          enum: ["Feature"]
+          pattern: "^(Feature)$"
         geometry:
           oneOf:
             - $ref: "#/components/schemas/geojsonPoint"
@@ -1537,7 +1534,7 @@ components:
       properties:
         type:
           type: string
-          enum: ["FeatureCollection"]
+          pattern: "^(FeatureCollection)$"
         features:
           type: array
           items:
@@ -1573,7 +1570,7 @@ components:
       properties:
         type:
           type: string
-          enum: ["OfferCollection"]
+          pattern: "^(OfferCollection)$"
         offers:
           type: array
           items:
@@ -1607,7 +1604,7 @@ components:
         properties:
           type:
             type: string
-            enum: [ package ]
+            pattern: "^(package)$"
           id:
             type: string
           status:
@@ -1642,7 +1639,7 @@ components:
           $ref: "#/components/schemas/shortString"
         type:
           type: string
-          enum: [ offer ]
+          pattern: "^(offer)$"
         properties:
           type: object
           properties:
@@ -1691,7 +1688,7 @@ components:
                 And when there are not additional legs in the offered or purchased package, the same **id** as the package id.
             type:
               type: string
-              enum: [ leg ]
+              pattern: "^(leg)$"
             sequenceNumber:
               $ref: "#/components/schemas/shortInt"
               description: The order of the leg within the package. Mandatory, if there are multiple legs in the package. If there are parallel legs (eg. using parking lot and a renting a bike), it can be the same within one package.
@@ -1728,7 +1725,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ product ]
+          pattern: "^(product)$"
         productId: 
           $ref: "#/components/schemas/productReference"
         productName:
@@ -1808,16 +1805,16 @@ components:
       type: string
       description: how this type is implemented?<br>
       enum: [
-          link,
-          barcode,
-          qrcode,
-          azteccode,
-          axa_ekey_otp,
-          bluetooth,
-          nfc, # proprietary
-          physical_key,
-          external_card,
-          none, # OTHER
+          LINK,
+          BARCODE,
+          QRCODE,
+          AZTECCODE,
+          AXA_EKEY_OTP,
+          BLUETOOTH,
+          NFC, # proprietary
+          PHYSICAL_KEY,
+          EXTERNAL_CARD,
+          OTHER, # OTHER
         ]
 
     mode:
@@ -1885,7 +1882,7 @@ components:
             $ref: "#/components/schemas/travellerReference"
           type:
             type: string
-            enum: [ individual_traveller ]
+            pattern: "^(individual_traveller)$"
           isValidated:
             type: boolean
             description: Whether this traveler's identity and properties have been verified by the MaaS provider
@@ -1894,7 +1891,7 @@ components:
             description: Age of the traveler, may be approximate
           gender:
             type: string
-            enum: [ 'male', 'female', 'x' ]
+            enum: [M, F, X, U]
           fullName:
             $ref: "#/components/schemas/normalString"
             description: the name of the traveller, can be used to validate against ID cards
@@ -2042,17 +2039,17 @@ components:
         _RELEASED_ for internal archiving, the package has not been purchased.<br>
       enum:
         [
-          offered,
-          selected,
-          pending,
-          confirmed,
-          released,
-          expired,
-          cancelled,
-          refund_claimed,
-          refunded,
-          started,
-          ended,
+          OFFERED,
+          SELECTED,
+          PENDING,
+          CONFIRMED,
+          RELEASED,
+          EXPIRED,
+          CANCELLED,
+          REFUND_CLAIMED,
+          REFUNDED,
+          STARTED,
+          ENDED,
         ]
 
     legState:
@@ -2069,15 +2066,15 @@ components:
         _ABENDED_ the leg is abnormally ended (e.g. due to an issue)
       enum:
         [
-          not_started,
-          preparing,
-          prepared,
-          in_use,
-          paused,
-          ended,
-          issue_reported,
-          cancelled,
-          abended
+          NOT_started,
+          PREPARING,
+          PREPARED,
+          IN_USE, 
+          PAUSED,
+          ENDED,
+          ISSUE_REPORTED,
+          CANCELLED,
+          ABENDED
         ]
 
     # parameters
@@ -2090,7 +2087,6 @@ components:
         type:
           type: string
           pattern: "^(asset)$"
-          enum: [ asset ]
         id:
           $ref: "#/components/schemas/assetReference"
 
@@ -2107,7 +2103,7 @@ components:
             $ref: "#/components/schemas/shortString"
           type:
             type: string
-            enum: [ user_profile ]
+            pattern: "^(user_profile)$"
           count:
             $ref: "#/components/schemas/shortInt"
             default: 1
@@ -2121,7 +2117,12 @@ components:
             $ref: "#/components/schemas/shortInt"
           ageGroup:
             type: string
-            enum: [ anyone, infant, child, youth, adult, senior ]
+            enum: [ ANYONE, 
+                    INFANT, 
+                    CHILD, 
+                    YOUTH, 
+                    ADULT, 
+                    SENIOR ]
           minimumHeight:
             $ref: "#/components/schemas/shortInt"
           maximumHeight:
@@ -2141,7 +2142,7 @@ components:
           $ref: "#/components/schemas/shortString"
         type:
           type: string
-          enum: [ commercial_profile ]
+          pattern: "^(commercial_profile)$"
         code:
           $ref: "#/components/schemas/shortString"
         name:
@@ -2159,7 +2160,7 @@ components:
           description: a unique ID for this usage. Especially required when it is a USER PROFILE or an INDIVIDUAL TRAVELLER. Other concepts might refer to this ID.
         type:
           type: string
-          enum: [ entitlement ]
+          pattern: "^(entitlement)$"
         entitlementType:
           $ref: "#/components/schemas/normalString"
 
@@ -2172,7 +2173,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ equipment ]
+          pattern: "^(equipment)$"
         id:
           $ref: "#/components/schemas/equipmentReference"
         name:
@@ -2192,7 +2193,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ temporal ]
+          pattern: "^(temporal)$"
         startTime:
           $ref: "#/components/schemas/dateTime"
         endTime:
@@ -2212,10 +2213,10 @@ components:
       properties:
         type:
           type: string
-          enum: [ spotReservation ]
+          pattern: "^(spot_reservation)$"
         spotType:
           type: string
-          enum: [ vehicle_spot, passenger_spot, luggage_spot ]
+          enum: [ VEHICLE_SPOT, PASSENGER_SPOT, LUGGAGE_SPOT ]
         deck:
           $ref: "#/components/schemas/externalReference"
         space:
@@ -2243,7 +2244,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ network ]
+          pattern: "^(network)$"
         location:
           $ref: "#/components/schemas/placeReference"
         line:
@@ -2262,7 +2263,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ routing ]
+          pattern: "^(routing)$"
         journeyPattern:
           type: array
           items:
@@ -2276,7 +2277,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ service ]
+          pattern: "^(service)$"
         product:
           $ref: "#/components/schemas/productReference"
         asset:
@@ -2307,7 +2308,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ onboard_stay ]
+          pattern: "^(onboard_stay)$"
         description:
           $ref: "#/components/schemas/longString"
         classOfUse:
@@ -2324,7 +2325,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ accommodation ]
+          pattern: "^(accommodation)$"
         description:
           $ref: "#/components/schemas/longString"
         classOfUse:
@@ -2336,7 +2337,7 @@ components:
           enum: [M, F, X, U]
         berthType:
           type: string
-          enum: [ sleeper ]
+          enum: [ SLEEPER, COUCHETTE, SEAT, OTHER ]
         nuisanceFacility:
           type: array
           items:
@@ -2350,7 +2351,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ distribution ]
+          pattern: "^(distribution)$"
         fulfilmentMethod:
           $ref: "#/components/schemas/normalString"
         distributionChannel:
@@ -2367,7 +2368,7 @@ components:
           $ref: "#/components/schemas/shortString"
         type:
           type: string
-          enum: [ organisational ]
+          pattern: "^(organisational)$"
         name:
           $ref: "#/components/schemas/normalString"
         legalName:
@@ -2386,7 +2387,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ cancel ]
+          pattern: "^(cancel)$"
         cancellationAllowed:
           type: boolean
           description: is it possible to cancel this package?
@@ -2411,7 +2412,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ purchase ]
+          pattern: "^(purchase)$"
         maximumPeriodBeforeDeparture:
           $ref: "#/components/schemas/longInt"
           description: Maximum time in minutes that an asset can be reserved before a rental begins.
@@ -2432,7 +2433,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ card ]
+          pattern: "^(card)$"
         cardType:
           $ref: "#/components/schemas/cardType"
         cardNumber:
@@ -2463,7 +2464,7 @@ components:
           description: external reference to address the card used.
         type:
           type: string
-          enum: [ card_type ]
+          pattern: "^(card_type)$"
         cardCategory:
           type: string
           description: The category of card<br>
@@ -2474,7 +2475,13 @@ components:
             ID - identification card, like an ID card<br>
             PASSPORT - passport to identify yourself<br>
             OTHER - unspecified, use 'subCategory' to specify the category of card
-          enum: [discount, travel, bank, credit, id, passport, other]
+          enum: [ DISCOUNT, 
+                  TRAVEL, 
+                  BANK, 
+                  CREDIT, 
+                  ID, 
+                  PASSPORT, 
+                  OTHER ]
         subCategory:
           $ref: "#/components/schemas/shortString"
           description: For use in case of OTHER. Can be used in bilateral agreements.
@@ -2499,7 +2506,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ license ]
+          pattern: "^(license)$"
         licenseType:
           $ref: "#/components/schemas/licenseType"
         licenseNumber:
@@ -2517,7 +2524,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ license_type ]
+          pattern: "^(license_type)$"
         modes:
           type: array
           items:
@@ -2585,7 +2592,7 @@ components:
       properties:
         type:
           type: string
-          enum: ["AncillaryCollection"]
+          pattern: "^(AncillaryCollection)$"
         ancillaries:
           type: array
           items:
@@ -2618,7 +2625,7 @@ components:
       properties:
         type:
           type: string
-          enum: ["RefundOptionCollection"]
+          pattern: "^(RefundOptionCollection)$"
         options:
           type: array
           items:
@@ -2651,7 +2658,7 @@ components:
       properties:
         type:
           type: string
-          enum: ["TravelDocumentCollection"]
+          pattern: "^(TravelDocumentCollection)$"
         travelDocuments:
           type: array
           items:
@@ -2688,7 +2695,7 @@ components:
         properties:
           type:
             type: string
-            enum: [ ancillary ]
+            pattern: "^(ancillary)$"
           links:
             type: array
             items: 
@@ -2699,7 +2706,7 @@ components:
       properties:
         type:
           type: string
-          enum: [seat]
+          pattern: "^(seat)$"
         id:
           $ref: "#/components/schemas/externalReference"
         deck:
@@ -2712,7 +2719,7 @@ components:
           $ref: "#/components/schemas/shortInt"
         facing:
           type: string
-          enum: [front, rear, left, right, other]
+          enum: [ FRONT, REAR, LEFT, RIGHT, OTHER ]
         byWindow:
           type: boolean
         legSpace:
@@ -2737,7 +2744,7 @@ components:
       properties:
         type:
           type: string
-          enum: [ asset ]
+          pattern: "^(asset)$"
         id:
           $ref: "#/components/schemas/assetReference"
           description: Identifier of an asset. Can be an external reference, but also a (internal) ID
@@ -2766,14 +2773,16 @@ components:
       properties:
         type:
           type: string
-          enum: [ refund_option ]
+          pattern: "^(refund_option)$"
         id:
           $ref: "#/components/schemas/uuid"
         packageState:
           $ref: "#/components/schemas/packageStatus"
         refundType:
           type: string
-          enum: [ package_refund, remove_traveller, remove_ancillary ]
+          enum: [ PACKAGE_REFUND, 
+                  REMOVE_TRAVELLER, 
+                  REMOVE_ANCILLARY ]
         consequences:
           type: array
           items:
@@ -2823,7 +2832,7 @@ components:
         properties:
           type:
             type: string
-            enum: [ binary_ticket ]
+            pattern: "^(binary_ticket)$"
           contentType:
             description: the media type (IANA)
             type: string
@@ -2843,7 +2852,6 @@ components:
         properties:
           type:
             type: string
-            enum: [ digital_ticket ]
 
     financialDetail:
       type: object
@@ -2887,22 +2895,22 @@ components:
         refund of the deposit or upfront paid fare<br> _REBATE_ - (partial)
         rebate of the fare<br> _REIMBURSEMENT_ - reimbursement of the fare<br>
       enum:
-        - ALL
-        - DAMAGE
-        - LOSS
-        - STOLEN
-        - EXTRA_USAGE
-        - REFUND
-        - REBATE
-        - REIMBURSEMENT
-        - FINE
-        - OTHER_ASSET_USED
-        - CREDIT
-        - VOUCHER
-        - DEPOSIT
-        - OTHER
-        - FARE
-        - FEE
+        [ ALL
+        , DAMAGE
+        , LOSS
+        , STOLEN
+        , EXTRA_USAGE
+        , REFUND
+        , REBATE
+        , REIMBURSEMENT
+        , FINE
+        , OTHER_ASSET_USED
+        , CREDIT
+        , VOUCHER
+        , DEPOSIT
+        , OTHER
+        , FARE
+        , FEE ]
 
     # referenced data
     externalReference:
@@ -3319,13 +3327,13 @@ components:
       x-tm: DAY OF WEEK
       type: string
       enum:
-        - MON
-        - TUE
-        - WED
-        - THU
-        - FRI
-        - SAT
-        - SUN
+        [ MON
+        , TUE
+        , WED
+        , THU
+        , FRI
+        , SAT
+        , SUN ]
     float:
       type: number
       description: the travelled distance. Only if applicable.
@@ -3571,11 +3579,6 @@ components:
       required: false
       schema:
         type: array
-        oneOf:
-          - minItems: 4
-            maxItems: 4
-          - minItems: 6
-            maxItems: 6
         items:
           type: number
       style: form

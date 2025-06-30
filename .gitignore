@@ -7,3 +7,4 @@ example-omsa-server/Scripts
 example-omsa-server/*.json
 example-omsa-server/*.cfg
 openapitools.json
+bundled.yaml
