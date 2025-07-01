@@ -1203,8 +1203,6 @@ components:
         type:
           type: string
           pattern: ^(search_offer)
-          enum:
-            - search_offer
         timestamp:
           description: timestamp of request
           $ref: '#/components/schemas/dateTime'
@@ -1242,8 +1240,7 @@ components:
             $ref: '#/components/schemas/offerReference'
         type:
           type: string
-          enum:
-            - select_offers
+          pattern: ^(select_offers)
         timestamp:
           description: timestamp of request
           $ref: '#/components/schemas/dateTime'
@@ -1257,8 +1254,7 @@ components:
           $ref: '#/components/schemas/packageReference'
         type:
           type: string
-          enum:
-            - package
+          pattern: ^(package)
         timestamp:
           description: timestamp of request
           $ref: '#/components/schemas/dateTime'
@@ -1276,8 +1272,7 @@ components:
               $ref: '#/components/schemas/legReference'
             type:
               type: string
-              enum:
-                - leg
+              pattern: ^(leg)
             location:
               $ref: '#/components/schemas/placeReference'
     refundOptionInput:
@@ -1287,9 +1282,6 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - claim_refund_option
-            - confirm_refund_option
           pattern: ^(claim_refund_option|confirm_refund_option)$
         optionId:
           $ref: '#/components/schemas/uuid'
@@ -1302,8 +1294,6 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - traveller
           pattern: ^(traveller)$
         travellerId:
           $ref: '#/components/schemas/travellerReference'
@@ -1326,8 +1316,7 @@ components:
           properties:
             type:
               type: string
-              enum:
-                - asset
+              pattern: ^(asset)$
             assetId:
               $ref: '#/components/schemas/assetReference'
             replaceAssetId:
@@ -1342,8 +1331,7 @@ components:
           properties:
             type:
               type: string
-              enum:
-                - ancillary
+              pattern: ^(ancillary)$
             ancillaryId:
               $ref: '#/components/schemas/ancillaryReference'
             replaceAncillaryId:
@@ -1357,8 +1345,7 @@ components:
           properties:
             type:
               type: string
-              enum:
-                - purchase_offers
+              pattern: ^(purchase_offers)$
     extendExpiryTimeInput:
       allOf:
         - $ref: '#/components/schemas/packageInput'
@@ -1368,16 +1355,11 @@ components:
           properties:
             type:
               type: string
-              pattern: ^(extend_expiry_time)
-              enum:
-                - extend_expiry_time
+              pattern: ^(extend_expiry_time)$
             extensionReason:
               type: string
               description: in case operation is EXTEND_EXPIRY_TIME, the reason for extension must be supplied here.<br> _PURCHASE_PENDING_ - The internal purchase process on the MP side is not yet finished<br> _PAYMENT_PENDING_ - The customer is in the payment process<br> _OTHER_ - unspecified
-              enum:
-                - purchase_pending
-                - payment_pending
-                - other
+              pattern: ^(purchase_pending|payment_pending|other)$
     basePoint:
       type: array
       minItems: 2
@@ -1439,8 +1421,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - Feature
+          pattern: ^(Feature)$
         geometry:
           oneOf:
             - $ref: '#/components/schemas/geojsonPoint'
@@ -1462,8 +1443,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - FeatureCollection
+          pattern: ^(FeatureCollection)$
         features:
           type: array
           items:
@@ -1496,8 +1476,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - OfferCollection
+          pattern: ^(OfferCollection)$
         offers:
           type: array
           items:
@@ -1526,8 +1505,7 @@ components:
           properties:
             type:
               type: string
-              enum:
-                - package
+              pattern: ^(package)$
             id:
               type: string
             status:
@@ -1561,8 +1539,7 @@ components:
           $ref: '#/components/schemas/shortString'
         type:
           type: string
-          enum:
-            - offer
+          pattern: ^(offer)$
         properties:
           type: object
           properties:
@@ -1608,8 +1585,7 @@ components:
               description: The unique identifier (TO) of this leg. Must always the same as applied in the request URL. And when there are not additional legs in the offered or purchased package, the same **id** as the package id.
             type:
               type: string
-              enum:
-                - leg
+              pattern: ^(leg)$
             sequenceNumber:
               $ref: '#/components/schemas/shortInt'
               description: The order of the leg within the package. Mandatory, if there are multiple legs in the package. If there are parallel legs (eg. using parking lot and a renting a bike), it can be the same within one package.
@@ -1645,8 +1621,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - product
+          pattern: ^(product)$
         productId:
           $ref: '#/components/schemas/productReference'
         productName:
@@ -1719,16 +1694,16 @@ components:
       type: string
       description: how this type is implemented?<br>
       enum:
-        - link
-        - barcode
-        - qrcode
-        - azteccode
-        - axa_ekey_otp
-        - bluetooth
-        - nfc
-        - physical_key
-        - external_card
-        - none
+        - LINK
+        - BARCODE
+        - QRCODE
+        - AZTECCODE
+        - AXA_EKEY_OTP
+        - BLUETOOTH
+        - NFC
+        - PHYSICAL_KEY
+        - EXTERNAL_CARD
+        - OTHER
     mode:
       x-tm:
         - concept: MODE
@@ -1788,8 +1763,7 @@ components:
               $ref: '#/components/schemas/travellerReference'
             type:
               type: string
-              enum:
-                - individual_traveller
+              pattern: ^(individual_traveller)$
             isValidated:
               type: boolean
               description: Whether this traveler's identity and properties have been verified by the MaaS provider
@@ -1799,9 +1773,10 @@ components:
             gender:
               type: string
               enum:
-                - male
-                - female
-                - x
+                - M
+                - F
+                - X
+                - U
             fullName:
               $ref: '#/components/schemas/normalString'
               description: the name of the traveller, can be used to validate against ID cards
@@ -1933,30 +1908,30 @@ components:
       type: string
       description: The life-cycle state of the package (from NEW to ENDED)<br> _OFFERED_ the package is offered<br> _SELECTED_ the package is selected to modify<br> _PENDING_ the purchase of the package is not confirmed (the end user has shown intentions to purchase this offer), must be finalized with the package-confirm operation<br> _CONFIRMED_ a finalized package ('purchased'). Both parties agreed to deliver services in return of payment<br> _CANCELLED_ the package is cancelled after it is purchased. The agreement will specify whether there is a refund, or under which conditions<br> _EXPIRED_ the MP didn't respond on time, the package offer has been expired<br> _STARTED_ the package is started, the <u>trip execution</u> module is needed now to manage the execution of the package<br> _ENDED_ the package has ended, the trip has been executed<br> _RELEASED_ for internal archiving, the package has not been purchased.<br>
       enum:
-        - offered
-        - selected
-        - pending
-        - confirmed
-        - released
-        - expired
-        - cancelled
-        - refund_claimed
-        - refunded
-        - started
-        - ended
+        - OFFERED
+        - SELECTED
+        - PENDING
+        - CONFIRMED
+        - RELEASED
+        - EXPIRED
+        - CANCELLED
+        - REFUND_CLAIMED
+        - REFUNDED
+        - STARTED
+        - ENDED
     legState:
       type: string
       description: status of a leg<br> _NOT_STARTED_ the leg is not started, initial state<br> _PREPARING_ the _PREPARE_ operation has been received<br> _PREPARED_ the leg is ready to use<br> _IN_USE_ the travelers are on their way<br> _PAUSED_ the asset is paused<br> _ENDED_ the travelers have arrived at their destination<br> _ISSUE_REPORTED_ due to an issue, there is (temporarily) no progress to report, when the issue isn't solved, this is a final state<br> _CANCELLED_ the leg has been cancelled, before execution<br> _ABENDED_ the leg is abnormally ended (e.g. due to an issue)
       enum:
-        - not_started
-        - preparing
-        - prepared
-        - in_use
-        - paused
-        - ended
-        - issue_reported
-        - cancelled
-        - abended
+        - NOT_started
+        - PREPARING
+        - PREPARED
+        - IN_USE
+        - PAUSED
+        - ENDED
+        - ISSUE_REPORTED
+        - CANCELLED
+        - ABENDED
     travellingAsset:
       type: object
       required:
@@ -1966,8 +1941,6 @@ components:
         type:
           type: string
           pattern: ^(asset)$
-          enum:
-            - asset
         id:
           $ref: '#/components/schemas/assetReference'
     userProfile:
@@ -1983,8 +1956,7 @@ components:
               $ref: '#/components/schemas/shortString'
             type:
               type: string
-              enum:
-                - user_profile
+              pattern: ^(user_profile)$
             count:
               $ref: '#/components/schemas/shortInt'
               default: 1
@@ -1999,12 +1971,12 @@ components:
             ageGroup:
               type: string
               enum:
-                - anyone
-                - infant
-                - child
-                - youth
-                - adult
-                - senior
+                - ANYONE
+                - INFANT
+                - CHILD
+                - YOUTH
+                - ADULT
+                - SENIOR
             minimumHeight:
               $ref: '#/components/schemas/shortInt'
             maximumHeight:
@@ -2023,8 +1995,7 @@ components:
           $ref: '#/components/schemas/shortString'
         type:
           type: string
-          enum:
-            - commercial_profile
+          pattern: ^(commercial_profile)$
         code:
           $ref: '#/components/schemas/shortString'
         name:
@@ -2041,8 +2012,7 @@ components:
           description: a unique ID for this usage. Especially required when it is a USER PROFILE or an INDIVIDUAL TRAVELLER. Other concepts might refer to this ID.
         type:
           type: string
-          enum:
-            - entitlement
+          pattern: ^(entitlement)$
         entitlementType:
           $ref: '#/components/schemas/normalString'
     equipmentParameter:
@@ -2053,8 +2023,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - equipment
+          pattern: ^(equipment)$
         id:
           $ref: '#/components/schemas/equipmentReference'
         name:
@@ -2073,8 +2042,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - temporal
+          pattern: ^(temporal)$
         startTime:
           $ref: '#/components/schemas/dateTime'
         endTime:
@@ -2093,14 +2061,13 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - spotReservation
+          pattern: ^(spot_reservation)$
         spotType:
           type: string
           enum:
-            - vehicle_spot
-            - passenger_spot
-            - luggage_spot
+            - VEHICLE_SPOT
+            - PASSENGER_SPOT
+            - LUGGAGE_SPOT
         deck:
           $ref: '#/components/schemas/externalReference'
         space:
@@ -2127,8 +2094,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - network
+          pattern: ^(network)$
         location:
           $ref: '#/components/schemas/placeReference'
         line:
@@ -2146,8 +2112,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - routing
+          pattern: ^(routing)$
         journeyPattern:
           type: array
           items:
@@ -2160,8 +2125,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - service
+          pattern: ^(service)$
         product:
           $ref: '#/components/schemas/productReference'
         asset:
@@ -2191,8 +2155,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - onboard_stay
+          pattern: ^(onboard_stay)$
         description:
           $ref: '#/components/schemas/longString'
         classOfUse:
@@ -2208,8 +2171,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - accommodation
+          pattern: ^(accommodation)$
         description:
           $ref: '#/components/schemas/longString'
         classOfUse:
@@ -2226,7 +2188,10 @@ components:
         berthType:
           type: string
           enum:
-            - sleeper
+            - SLEEPER
+            - COUCHETTE
+            - SEAT
+            - OTHER
         nuisanceFacility:
           type: array
           items:
@@ -2239,8 +2204,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - distribution
+          pattern: ^(distribution)$
         fulfilmentMethod:
           $ref: '#/components/schemas/normalString'
         distributionChannel:
@@ -2256,8 +2220,7 @@ components:
           $ref: '#/components/schemas/shortString'
         type:
           type: string
-          enum:
-            - organisational
+          pattern: ^(organisational)$
         name:
           $ref: '#/components/schemas/normalString'
         legalName:
@@ -2275,8 +2238,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - cancel
+          pattern: ^(cancel)$
         cancellationAllowed:
           type: boolean
           description: is it possible to cancel this package?
@@ -2300,8 +2262,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - purchase
+          pattern: ^(purchase)$
         maximumPeriodBeforeDeparture:
           $ref: '#/components/schemas/longInt'
           description: Maximum time in minutes that an asset can be reserved before a rental begins.
@@ -2321,8 +2282,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - card
+          pattern: ^(card)$
         cardType:
           $ref: '#/components/schemas/cardType'
         cardNumber:
@@ -2352,19 +2312,18 @@ components:
           description: external reference to address the card used.
         type:
           type: string
-          enum:
-            - card_type
+          pattern: ^(card_type)$
         cardCategory:
           type: string
           description: The category of card<br> DISCOUNT - discount card, can be applied in the purchase process to get rebate<br> TRAVEL - (external) travel card, possibly paid for in other context, but also monthly, weekly or day-cards<br> BANK - bank card<br> CREDIT - credit card<br> ID - identification card, like an ID card<br> PASSPORT - passport to identify yourself<br> OTHER - unspecified, use 'subCategory' to specify the category of card
           enum:
-            - discount
-            - travel
-            - bank
-            - credit
-            - id
-            - passport
-            - other
+            - DISCOUNT
+            - TRAVEL
+            - BANK
+            - CREDIT
+            - ID
+            - PASSPORT
+            - OTHER
         subCategory:
           $ref: '#/components/schemas/shortString'
           description: For use in case of OTHER. Can be used in bilateral agreements.
@@ -2388,8 +2347,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - license
+          pattern: ^(license)$
         licenseType:
           $ref: '#/components/schemas/licenseType'
         licenseNumber:
@@ -2406,8 +2364,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - license_type
+          pattern: ^(license_type)$
         modes:
           type: array
           items:
@@ -2469,8 +2426,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - AncillaryCollection
+          pattern: ^(AncillaryCollection)$
         ancillaries:
           type: array
           items:
@@ -2500,8 +2456,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - RefundOptionCollection
+          pattern: ^(RefundOptionCollection)$
         options:
           type: array
           items:
@@ -2531,8 +2486,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - TravelDocumentCollection
+          pattern: ^(TravelDocumentCollection)$
         travelDocuments:
           type: array
           items:
@@ -2566,8 +2520,7 @@ components:
           properties:
             type:
               type: string
-              enum:
-                - ancillary
+              pattern: ^(ancillary)$
             links:
               type: array
               items:
@@ -2577,8 +2530,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - seat
+          pattern: ^(seat)$
         id:
           $ref: '#/components/schemas/externalReference'
         deck:
@@ -2592,11 +2544,11 @@ components:
         facing:
           type: string
           enum:
-            - front
-            - rear
-            - left
-            - right
-            - other
+            - FRONT
+            - REAR
+            - LEFT
+            - RIGHT
+            - OTHER
         byWindow:
           type: boolean
         legSpace:
@@ -2620,8 +2572,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - asset
+          pattern: ^(asset)$
         id:
           $ref: '#/components/schemas/assetReference'
           description: Identifier of an asset. Can be an external reference, but also a (internal) ID
@@ -2646,8 +2597,7 @@ components:
       properties:
         type:
           type: string
-          enum:
-            - refund_option
+          pattern: ^(refund_option)$
         id:
           $ref: '#/components/schemas/uuid'
         packageState:
@@ -2655,9 +2605,9 @@ components:
         refundType:
           type: string
           enum:
-            - package_refund
-            - remove_traveller
-            - remove_ancillary
+            - PACKAGE_REFUND
+            - REMOVE_TRAVELLER
+            - REMOVE_ANCILLARY
         consequences:
           type: array
           items:
@@ -2702,8 +2652,7 @@ components:
           properties:
             type:
               type: string
-              enum:
-                - binary_ticket
+              pattern: ^(binary_ticket)$
             contentType:
               description: the media type (IANA)
               type: string
@@ -2722,8 +2671,6 @@ components:
           properties:
             type:
               type: string
-              enum:
-                - digital_ticket
     financialDetail:
       type: object
       properties:
@@ -2954,7 +2901,9 @@ components:
           items:
             $ref: '#/components/schemas/link'
         extent:
-          $ref: '#/components/schemas/extent-uad'
+          externalDocs:
+            url: https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/common-geodata/extent-uad.yaml
+          type: object
         itemType:
           description: indicator about the type of the items in the collection if the collection has an accessible /collections/{collectionId}/items endpoint
           type: string
@@ -3198,303 +3147,6 @@ components:
           items:
             type: string
             example: http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core
-    extent:
-      description: |-
-        The extent of the data in the collection. In the Core only spatial and temporal
-        extents are specified. Extensions may add additional members to represent other
-        extents, for example, thermal or pressure ranges.
-
-        The first item in the array describes the overall extent of
-        the data. All subsequent items describe more precise extents,
-        e.g., to identify clusters of data.
-        Clients only interested in the overall extent will only need to
-        access the first item in each array.
-      type: object
-      properties:
-        spatial:
-          description: The spatial extent of the data in the collection.
-          type: object
-          properties:
-            bbox:
-              description: |-
-                One or more bounding boxes that describe the spatial extent of the dataset.
-                In the Core only a single bounding box is supported.
-
-                Extensions may support additional areas.
-                The first bounding box describes the overall spatial
-                extent of the data. All subsequent bounding boxes describe
-                more precise bounding boxes, e.g., to identify clusters of data.
-                Clients only interested in the overall spatial extent will
-                only need to access the first item in each array.
-              type: array
-              minItems: 1
-              items:
-                description: |-
-                  Each bounding box is provided as four or six numbers, depending on
-                  whether the coordinate reference system includes a vertical axis
-                  (height or depth):
-
-                  * Lower left corner, coordinate axis 1
-                  * Lower left corner, coordinate axis 2
-                  * Minimum value, coordinate axis 3 (optional)
-                  * Upper right corner, coordinate axis 1
-                  * Upper right corner, coordinate axis 2
-                  * Maximum value, coordinate axis 3 (optional)
-
-                  If the value consists of four numbers, the coordinate reference system is
-                  WGS 84 longitude/latitude (http://www.opengis.net/def/crs/OGC/1.3/CRS84)
-                  unless a different coordinate reference system is specified in a parameter `bbox-crs`.
-
-                  If the value consists of six numbers, the coordinate reference system is WGS 84
-                  longitude/latitude/ellipsoidal height (http://www.opengis.net/def/crs/OGC/0/CRS84h)
-                  unless a different coordinate reference system is specified in a parameter `bbox-crs`.
-
-                  For WGS 84 longitude/latitude the values are in most cases the sequence of
-                  minimum longitude, minimum latitude, maximum longitude and maximum latitude.
-                  However, in cases where the box spans the antimeridian the first value
-                  (west-most box edge) is larger than the third value (east-most box edge).
-
-                  If the vertical axis is included, the third and the sixth number are
-                  the bottom and the top of the 3-dimensional bounding box.
-
-                  If a feature has multiple spatial geometry properties, it is the decision of the
-                  server whether only a single spatial geometry property is used to determine
-                  the extent or all relevant geometries.
-                type: array
-                oneOf:
-                  - minItems: 4
-                    maxItems: 4
-                  - minItems: 6
-                    maxItems: 6
-                items:
-                  type: number
-                example:
-                  - -180
-                  - -90
-                  - 180
-                  - 90
-            crs:
-              description: |-
-                Coordinate reference system of the coordinates in the spatial extent
-                (property `bbox`). The default reference system is WGS 84 longitude/latitude.
-                In the Core the only other supported coordinate reference system is
-                WGS 84 longitude/latitude/ellipsoidal height for coordinates with height.
-                Extensions may support additional coordinate reference systems and add
-                additional enum values.
-              type: string
-              enum:
-                - http://www.opengis.net/def/crs/OGC/1.3/CRS84
-                - http://www.opengis.net/def/crs/OGC/0/CRS84h
-              default: http://www.opengis.net/def/crs/OGC/1.3/CRS84
-            grid:
-              description: |-
-                Provides information about the limited availability of data within the collection organized
-                as a grid (regular or irregular) along each spatial dimension.
-              type: array
-              minItems: 2
-              maxItems: 3
-              items:
-                type: object
-                properties:
-                  coordinates:
-                    description: |-
-                      List of coordinates along the dimension for which data organized as an irregular grid in the collection is available
-                      (e.g., 2, 10, 80, 100).
-                    type: array
-                    minItems: 1
-                    items:
-                      oneOf:
-                        - type: string
-                          nullable: true
-                        - type: number
-                    example:
-                      - 2
-                      - 10
-                      - 80
-                      - 100
-                  cellsCount:
-                    description: |-
-                      Number of samples available along the dimension for data organized as a regular grid.
-                      For values representing the whole area of contiguous cells spanning _resolution_ units along the dimension, this will be (_upperBound_ - _lowerBound_) / _resolution_.
-                      For values representing infinitely small point cells spaced by _resolution_ units along the dimension, this will be (_upperBound_ - _lowerBound_) / _resolution_ + 1.
-                    type: integer
-                    example: 50
-                  resolution:
-                    description: Resolution of regularly gridded data along the dimension in the collection
-                    oneOf:
-                      - type: string
-                        nullable: true
-                      - type: number
-                    example: 0.0006866455078
-        temporal:
-          description: The temporal extent of the features in the collection.
-          type: object
-          properties:
-            interval:
-              description: |-
-                One or more time intervals that describe the temporal extent of the dataset.
-                In the Core only a single time interval is supported.
-
-                Extensions may support multiple intervals.
-                The first time interval describes the overall
-                temporal extent of the data. All subsequent time intervals describe
-                more precise time intervals, e.g., to identify clusters of data.
-                Clients only interested in the overall extent will only need
-                to access the first item in each array.
-              type: array
-              minItems: 1
-              items:
-                description: |-
-                  Begin and end times of the time interval. The timestamps are in the
-                  temporal coordinate reference system specified in `trs`. By default
-                  this is the Gregorian calendar.
-
-                  The value `null` for start or end time is supported and indicates a half-bounded time interval.
-                type: array
-                minItems: 2
-                maxItems: 2
-                items:
-                  type: string
-                  format: date-time
-                  nullable: true
-                example:
-                  - '2011-11-11T12:22:11Z'
-                  - null
-            trs:
-              description: |-
-                Coordinate reference system of the coordinates in the temporal extent
-                (property `interval`). The default reference system is the Gregorian calendar.
-                In the Core this is the only supported temporal coordinate reference system.
-                Extensions may support additional temporal coordinate reference systems and add
-                additional enum values.
-              type: string
-              enum:
-                - http://www.opengis.net/def/uom/ISO-8601/0/Gregorian
-              default: http://www.opengis.net/def/uom/ISO-8601/0/Gregorian
-            grid:
-              type: object
-              description: Provides information about the limited availability of data within the collection organized as a grid (regular or irregular) along the temporal dimension.
-              properties:
-                coordinates:
-                  description: |-
-                    List of coordinates along the temporal dimension for which data organized as an irregular grid in the collection is available
-                    (e.g., "2017-11-14T09:00Z","2017-11-14T12:00Z","2017-11-14T15:00Z","2017-11-14T18:00Z","2017-11-14T21:00Z").
-                  type: array
-                  minItems: 1
-                  items:
-                    type: string
-                    nullable: true
-                  example:
-                    - - 2020-11-12T12:15Z
-                      - 2020-11-12T12:30Z
-                      - 2020-11-12T12:45Z
-                cellsCount:
-                  description: |-
-                    Number of samples available along the temporal dimension for data organized as a regular grid.
-                    For values representing the whole area of contiguous cells spanning _resolution_ units along the dimension, this will be (_upperBound_ - _lowerBound_) / _resolution_.
-                    For values representing infinitely small point cells spaced by _resolution_ units along the dimension, this will be (_upperBound_ - _lowerBound_) / _resolution_ + 1.
-                  type: integer
-                  example: 50
-                resolution:
-                  description: Resolution of regularly gridded data along the temporal dimension in the collection
-                  oneOf:
-                    - type: string
-                      nullable: true
-                    - type: number
-                  example: PT1H
-    extent-uad:
-      title: Extent with Uniform Additional Dimensions Schema
-      description: |-
-        The extent module only addresses spatial and temporal extents. This module extends extent by specifying how
-        intervals and crs properties can be used to specify additional geometries.
-      allOf:
-        - $ref: '#/components/schemas/extent'
-        - type: object
-          additionalProperties:
-            description: The domain intervals for any additional dimensions of the extent (envelope) beyond those described in temporal and spatial.
-            type: object
-            oneOf:
-              - required:
-                  - interval
-                  - crs
-              - required:
-                  - interval
-                  - trs
-              - required:
-                  - interval
-                  - vrs
-            properties:
-              interval:
-                description: |-
-                  One or more intervals that describe the extent for this dimension of the dataset.
-                  The value `null` is supported and indicates an unbounded or half-bounded interval.
-                  The first interval describes the overall extent of the data for this dimension.
-                  All subsequent intervals describe more precise intervals, e.g., to identify clusters of data.
-                  Clients only interested in the overall extent will only need
-                  to access the first item (a pair of lower and upper bound values).
-                type: array
-                minItems: 1
-                items:
-                  description: |-
-                    Lower and upper bound values of the interval. The values
-                    are in the coordinate reference system specified in `crs`, `trs` or `vrs`.
-                  type: array
-                  minItems: 2
-                  maxItems: 2
-                  items:
-                    oneOf:
-                      - type: string
-                        nullable: true
-                      - type: number
-                  example:
-                    - '2011-11-11T12:22:11Z'
-                    - 32.5
-                    - null
-              crs:
-                type: string
-                description: generic coordinate reference system suitable for any type of dimensions
-              trs:
-                type: string
-                description: temporal coordinate reference system (e.g. as defined by Features for 'temporal')
-              vrs:
-                type: string
-                description: vertical coordinate reference system (e.g. as defined in EDR for 'vertical')
-              grid:
-                type: object
-                description: Provides information about the limited availability of data within the collection organized as a grid (regular or irregular) along the dimension.
-                properties:
-                  coordinates:
-                    description: |-
-                      List of coordinates along the temporal dimension for which data organized as an irregular grid in the collection is available
-                      (e.g., 2, 10, 80, 100).
-                    type: array
-                    minItems: 1
-                    items:
-                      oneOf:
-                        - type: string
-                          nullable: true
-                        - type: number
-                    example:
-                      - 2
-                      - 10
-                      - 80
-                      - 100
-                  cellsCount:
-                    description: |-
-                      Number of samples available along the dimension for data organized as a regular grid.
-                      For values representing the whole area of contiguous cells spanning _resolution_ units along the dimension, this will be (_upperBound_ - _lowerBound_) / _resolution_.
-                      For values representing infinitely small point cells spaced by _resolution_ units along the dimension, this will be (_upperBound_ - _lowerBound_) / _resolution_ + 1.
-                    type: integer
-                    example: 50
-                  resolution:
-                    description: Resolution of regularly gridded data along the dimension in the collection
-                    oneOf:
-                      - type: string
-                        nullable: true
-                      - type: number
-                    example:
-                      - PT1H
-                      - 0.0006866455078
     dataType:
       oneOf:
         - type: string
@@ -3634,11 +3286,6 @@ components:
       required: false
       schema:
         type: array
-        oneOf:
-          - minItems: 4
-            maxItems: 4
-          - minItems: 6
-            maxItems: 6
         items:
           type: number
       style: form
