@@ -1034,9 +1034,7 @@ components:
   responses:
     errorResponse:
       description: >-
-        Bad request. See
-        https://github.com/TOMP-WG/TOMP-API/wiki/Error-handling-in-TOMP for
-        further explanation of error code.
+        Bad request.
       headers:
         Version:
           $ref: '#/components/headers/version'
@@ -3393,12 +3391,7 @@ components:
     error:
       type: object
       additionalProperties: false
-      description: >-
-        An error that the service may send, e.g. in case of invalId input,
-        missing authorization or internal service error. See
-        https://github.com/TOMP-WG/TOMP-API/wiki/Error-handling-in-TOMP for
-        further explanation of error code. JSON schema for exceptions based on
-        RFC 7807
+      description: JSON schema for exceptions based on RFC 7807
       required:
         - errorcode
         - title
@@ -3406,9 +3399,7 @@ components:
         errorcode:
           $ref: '#/components/schemas/tinyInt'
           description: >-
-            The TOMP specific error code. See
-            https://github.com/TOMP-WG/TOMP-API/wiki/Error-handling-in-TOMP for
-            more details of this error.
+            The specific error code
         type:
           $ref: '#/components/schemas/tinyString'
           description: The category of this type of error.
