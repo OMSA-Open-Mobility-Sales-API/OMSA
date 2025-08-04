@@ -1666,9 +1666,9 @@ components:
                 name:
                   type: string
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -1690,9 +1690,9 @@ components:
           items:
             $ref: "#/components/schemas/offer"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -2819,9 +2819,9 @@ components:
                 items:
                   $ref: "#/components/schemas/link"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -2852,9 +2852,9 @@ components:
                 items:
                   $ref: "#/components/schemas/link"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -2889,9 +2889,9 @@ components:
                 items:
                   $ref: "#/components/schemas/link"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
