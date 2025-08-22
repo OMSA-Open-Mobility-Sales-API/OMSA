@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Common Booking API
-  version: 0.0.1
+  version: 0.0.2
  
 servers:
   - url: https://example.b5/
@@ -739,7 +739,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+                #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/landingPage.yaml' 
             text/html:
               schema:
                 type: string
@@ -784,7 +785,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+                # $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/confClasses.yaml'
             text/html:
               schema:
                 type: string
@@ -817,7 +819,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml'
+                # $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-geodata/collections.yaml'
         default:
           $ref: '#/components/responses/errorResponse'
   /collections/{collectionId}:
@@ -843,7 +846,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml'
+                #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml'
+                $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-geodata/collectionInfo.yaml'
             text/html:
               schema:
                 type: string
@@ -878,7 +882,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/processList.yaml'
+                #$ref: 'https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/processList.yaml'
+                $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/processes-core/processList.yaml'
         default:
           $ref: '#/components/responses/errorResponse'
   /processes/{processID}:
@@ -929,7 +934,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/process.yaml"
+                #$ref: "https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/process.yaml"
+                $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/processes-core/process.yaml'
         default:
           $ref: '#/components/responses/errorResponse'
 
@@ -1024,7 +1030,8 @@ components:
       content:
         application/json:
           schema:
-            $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+            #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml'
+            $ref: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/refs/heads/master/openapi/schemas/common-core/landingPage.yaml'
     conformanceDeclarationResponse:
       description: |-
         The URIs of all conformance classes supported by the server.
@@ -1036,7 +1043,8 @@ components:
       content:
         application/json:
           schema:
-            $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+            #$ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml'
+            $ref: 'https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/confClasses.yaml'
         text/html:
           schema:
             type: string
@@ -1205,7 +1213,8 @@ components:
     subscriber:
       type: object
       externalDocs:
-        url: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/subscriber.yaml
+        # url: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/subscriber.yaml
+        url: https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/processes-core/subscriber.yaml
       description: |-
         Optional URIs for callbacks for this job.
 
@@ -1942,15 +1951,10 @@ components:
         type: object
         required:
           - id
-          - type
         description: A generic description of a traveler, not including any identifying information
-        additionalProperties: true
         properties:
           id:
             $ref: "#/components/schemas/travellerReference"
-          type:
-            type: string
-            enum: [ individual_traveller ]
           isValidated:
             type: boolean
             description: Whether this traveler's identity and properties have been verified by the MaaS provider
@@ -1962,13 +1966,18 @@ components:
             description: the name of the traveller, can be used to validate against ID cards
           customerReference:
             $ref: "#/components/schemas/customerReference"
+          customFields:
+            $ref: '#/components/schemas/customProperties'
 
     travelParty:
       x-tm: ACCESS RIGHT PARAMETER ASSIGNMENT
       type: object
+      required:
+        - type
       properties:
         type:
           type: string
+          enum: [ individual_traveller, user_profile, asset ]
         entitlements:
           type: object
           properties:
@@ -2203,23 +2212,21 @@ components:
           LICENSE_TYPE: "#/components/schemas/licenseType"
           LICENSE: "#/components/schemas/license"
           ASSET: "#/components/schemas/travellingAsset"
+      required:
+      - type
       properties:
         type:
           type: string
+          enum: [ individual_traveller, user_profile, companion_profile, commercial_profile, entitlement, card_type, card, license_type, license, asset ]
 
     # parameters
     travellingAsset:
       allOf:
-      - $ref: "#/components/schemas/usage"
+      - $ref: "#/components/schemas/travelParty"
       - type: object
         required:
-        - type
         - id
         properties:
-          type:
-            type: string
-            pattern: "^(asset)$"
-            enum: [ asset ]
           id:
             $ref: "#/components/schemas/assetReference"
 
@@ -2230,13 +2237,9 @@ components:
         type: object
         required:
         - id
-        - type
         properties:
           id:
             $ref: "#/components/schemas/shortString"
-          type:
-            type: string
-            enum: [ user_profile ]
           count:
             $ref: "#/components/schemas/shortInt"
             default: 1
@@ -2260,19 +2263,22 @@ components:
           genderLimitation:
             type: boolean
 
+    companionProfile:
+      allOf:
+      - $ref: "#/components/schemas/usage"
+      - type: object
+        properties:
+          id:
+            $ref: "#/components/schemas/shortString"          
+
     commercialProfile:
       allOf:
       - $ref: "#/components/schemas/usage"
       - x-tm: COMMERCIAL PROFILE
-        required:
-        - type
         type: object
         properties:
           id:
             $ref: "#/components/schemas/shortString"
-          type:
-            type: string
-            enum: [ commercial_profile ]
           code:
             $ref: "#/components/schemas/shortString"
           name:
@@ -2284,15 +2290,11 @@ components:
       - x-tm: ENTITLEMENT GIVEN
         type: object
         required:
-          - type
           - entitlementType
         properties:
           id:
             $ref: "#/components/schemas/shortString"
             description: a unique ID for this usage. Especially required when it is a USER PROFILE or an INDIVIDUAL TRAVELLER. Other concepts might refer to this ID.
-          type:
-            type: string
-            enum: [ entitlement ]
           entitlementType:
             $ref: "#/components/schemas/normalString"
 
@@ -2557,31 +2559,31 @@ components:
 
     card:
       x-tm: CUSTOMER PAYMENT MEANS, MEDIUM APPLICATION INSTANCE
-      allOf:
-      - $ref: "#/components/schemas/cardType"
-      - type: object
-        description: Any kind of card that isn't a license, only provide the cards that are required
-        required:
-          - type
-          - cardNumber
-        properties:
-          type:
-            type: string
-            enum: [ card ]
-          cardNumber:
-            $ref: "#/components/schemas/shortString"
-            description: number of the card, like ID number, credit card or bank account number
-          description:
-            $ref: "#/components/schemas/shortString"
-            description: description of the card
-          additionalNumber:
-            $ref: "#/components/schemas/shortString"
-            description: additional number, like CVC code or IBAN code
-          endValidity:
-            $ref: "#/components/schemas/date"
-            description: this card is valid until this date
-          country:
-            $ref: "#/components/schemas/country"
+      type: object
+      description: Any kind of card that isn't a license, only provide the cards that are required
+      required:
+        - type
+        - cardNumber
+      properties:
+        type:
+          type: string
+          enum: [ card ]
+        cardType:
+          $ref: "#/components/schemas/cardType"
+        cardNumber:
+          $ref: "#/components/schemas/shortString"
+          description: number of the card, like ID number, credit card or bank account number
+        description:
+          $ref: "#/components/schemas/shortString"
+          description: description of the card
+        additionalNumber:
+          $ref: "#/components/schemas/shortString"
+          description: additional number, like CVC code or IBAN code
+        endValidity:
+          $ref: "#/components/schemas/date"
+          description: this card is valid until this date
+        country:
+          $ref: "#/components/schemas/country"
 
     cardType:
       allOf:
@@ -2589,29 +2591,24 @@ components:
       - x-tm: TYPE OF PAYMENT METHOD, MEDIUM ACCESS DEVICE
         type: object
         description: A generic description of a CARD
-        additionalProperties: true
         required:
-          - type
           - id
         properties:
           id:
             $ref: "#/components/schemas/shortString"
             description: external reference to address the card used.
-          type:
+          cardCategory:
             type: string
-            enum: [ card_type ]
-          cardType:
-            type: string
-            description: The broad category of card<br>
+            description: The category of card<br>
               DISCOUNT - discount card, can be applied in the purchase process to get rebate<br>
               TRAVEL - (external) travel card, possibly paid for in other context, but also monthly, weekly or day-cards<br>
               BANK - bank card<br>
               CREDIT - credit card<br>
               ID - identification card, like an ID card<br>
               PASSPORT - passport to identify yourself<br>
-              OTHER - unspecified
+              OTHER - unspecified, use 'subCategory' to specify the category of card
             enum: [discount, travel, bank, credit, id, passport, other]
-          subType:
+          subCategory:
             $ref: "#/components/schemas/shortString"
             description: For use in case of OTHER. Can be used in bilateral agreements.
           relatedProduct:
@@ -2622,24 +2619,23 @@ components:
             description: references to accepting parties, only if applicable
             items:
               $ref: "#/components/schemas/organisationReference"
+          customFields:
+            $ref: '#/components/schemas/customProperties'
 
     license:
       x-tm: ACCEPTED DRIVER PERMIT
-      allOf:
-        - $ref: "#/components/schemas/licenseType"
-        - type: object
-          description: driver or usage license for a specific user. Contains the number and the assetType you're allowed to operate (e.g. driver license for CAR)
-          required:
-            - number
-            - type
-          properties:
-            type:
-              type: string
-              enum: [ license ]
-            licenseNumber:
-              $ref: "#/components/schemas/shortString"
-            endValidity:
-              $ref: "#/components/schemas/date"
+      type: object
+      description: driver or usage license for a specific user. Contains the number and the assetType you're allowed to operate (e.g. driver license for CAR)
+      required:
+        - number
+        - type
+      properties:
+        licenseType:
+          $ref: "#/components/schemas/licenseType"
+        licenseNumber:
+          $ref: "#/components/schemas/shortString"
+        endValidity:
+          $ref: "#/components/schemas/date"
 
     licenseType:
       allOf:
@@ -2647,14 +2643,9 @@ components:
       - x-tm: TYPE OF DRIVER PERMIT
         type: object
         description: A category of license to use a certain asset class
-        additionalProperties: true
         required:
           - mode
-          - type
         properties:
-          type:
-            type: string
-            enum: [ license_type ]
           modes:
             type: array
             items:
@@ -2664,6 +2655,8 @@ components:
             description: in most countries a driver license has also a code. As TO you can exactly verify, based on this code if the license allows to operate it's assets, if the assetType too generic.
           issuingCountry:
             $ref: "#/components/schemas/country"
+          customFields:
+            $ref: '#/components/schemas/customProperties'
 
     guarantee:
       type: object
@@ -3131,7 +3124,6 @@ components:
 
     financialDetail:
       type: object
-      additionalProperties: true
       properties:
         amount:
           $ref: '#/components/schemas/amountOfMoney'
@@ -3145,6 +3137,8 @@ components:
           $ref: '#/components/schemas/paymentCategory'
         expirationDate:
           $ref: '#/components/schemas/dateTime'
+        customFields:
+          $ref: '#/components/schemas/customProperties'
 
     paymentCategory:
       type: string
@@ -3189,8 +3183,7 @@ components:
 
     # referenced data
     externalReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     organisationReference:
       type: object
@@ -3221,12 +3214,10 @@ components:
           $ref: "#/components/schemas/normalString"
 
     customerReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     travellerReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     productReference:
       type: object
@@ -3240,20 +3231,16 @@ components:
           $ref: "#/components/schemas/normalString"
 
     offerReference:
-      allOf:
-      - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     packageReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     legReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     lineReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     zoneReference:
       type: object
@@ -3296,8 +3283,7 @@ components:
           $ref: "#/components/schemas/normalString"
 
     serviceJourneyReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     userNeedReference:
       type: object
@@ -3371,8 +3357,7 @@ components:
       type: object
       additionalProperties: false
       x-externalDocs:
-        url: >-
-          http://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/link.yaml
+        url: https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/common-core/link.yaml
       required:
         - href
         - rel
