@@ -497,7 +497,7 @@ paths:
 
   /processes/extend-expiry-time/execute:
     post:
-      operationId: extendExpiryTimerocessHandler
+      operationId: extendExpiryTimeProcessHandler
       summary: "Handles extending expiry time"
       security:
         - BearerAuth: []
