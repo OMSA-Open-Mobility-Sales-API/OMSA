@@ -3247,20 +3247,16 @@ components:
           $ref: "#/components/schemas/normalString"
 
     offerReference:
-      allOf:
-      - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     packageReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     legReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     lineReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     zoneReference:
       type: object
@@ -3303,8 +3299,7 @@ components:
           $ref: "#/components/schemas/normalString"
 
     serviceJourneyReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     userNeedReference:
       type: object
