@@ -236,7 +236,7 @@ paths:
 
   /processes/assign-ancillary/execute:
     post:
-      operationId: assignAncillaryProcessHandler
+      operationId: assignAncillaryHandler
       summary: "Handles assigning ancillary processes"
       security:
         - BearerAuth: []
@@ -278,7 +278,7 @@ paths:
 
   /processes/purchase-offers/execute:
     post:
-      operationId: purchaseOffersProcessHandler
+      operationId: purchaseOffersHandler
       summary: "Handles purchase of offers"
       security:
         - BearerAuth: []
@@ -320,7 +320,7 @@ paths:
 
   /processes/purchase-package/execute:
     post:
-      operationId: purchasePackageProcessHandler
+      operationId: purchasePackageHandler
       summary: "Handles purchase processes"
       security:
         - BearerAuth: []
@@ -362,7 +362,7 @@ paths:
 
   /processes/2-phase-purchase-package/execute:
     post:
-      operationId: twoPhasePurchasePackageProcessHandler
+      operationId: twoPhasePurchasePackageHandler
       summary: "Handles purchase processes"
       security:
         - BearerAuth: []
@@ -373,9 +373,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/bbox"
       requestBody:
         required: true
         content:
@@ -407,7 +404,7 @@ paths:
 
   /processes/confirm-package/execute:
     post:
-      operationId: confirmPackageProcessHandler
+      operationId: confirmPackageHandler
       summary: "Handles purchase processes"
       security:
         - BearerAuth: []
@@ -418,9 +415,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/bbox"
       requestBody:
         required: true
         content:
@@ -452,7 +446,7 @@ paths:
 
   /processes/release-package/execute:
     post:
-      operationId: releasePackageProcessHandler
+      operationId: releasePackageHandler
       summary: "Handles purchase processes"
       security:
         - BearerAuth: []
@@ -463,9 +457,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/bbox"
       requestBody:
         required: true
         content:
@@ -523,11 +514,23 @@ paths:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
+      callbacks:
+        jobCompleted:
+          '{$request.body#/subscriber/successUri}':
+            post:
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/package'
+              responses:
+                "200":
+                  description: Results received successfully
           $ref: "#/components/responses/errorResponse"
 
   /processes/cancel-package/execute:
     post:
-      operationId: cancelPackageProcessHandler
+      operationId: cancelPackageHandler
       summary: "Handles cancel package processes"
       security:
         - BearerAuth: []
@@ -569,7 +572,7 @@ paths:
 
   /processes/claim-refund-option/execute:
     post:
-      operationId: claimRefundProcessHandler
+      operationId: claimRefundHandler
       summary: "Handles claim of refund options"
       security:
         - BearerAuth: []
@@ -611,7 +614,7 @@ paths:
 
   /processes/confirm-refund-option/execute:
     post:
-      operationId: confirmRefundClaimProcessHandler
+      operationId: confirmRefundClaimHandler
       summary: "Handles confirmation of the refund claim"
       security:
         - BearerAuth: []
@@ -1313,7 +1316,6 @@ components:
         properties:
           type:
             type: string
-            pattern: "^(search_offer)"
             enum: [ search_offer ]
           specification:
             allOf:
@@ -1398,7 +1400,6 @@ components:
           type:
             type: string
             enum: [ refund-option ]
-            pattern: "^(refund-option)$"
           reason:
             $ref: "#/components/schemas/normalString"
           refundType:
@@ -1415,7 +1416,6 @@ components:
         type:
           type: string
           enum: [ claim_refund_option, confirm_refund_option ]
-          pattern: "^(claim_refund_option|confirm_refund_option)$"
         optionId:
           $ref: "#/components/schemas/uuid"
 
@@ -1429,7 +1429,6 @@ components:
         type:
           type: string
           enum: [ traveller ]
-          pattern: "^(traveller)$"
         travellerId:
           $ref: "#/components/schemas/travellerReference"
         packageId:
@@ -1453,7 +1452,6 @@ components:
             $ref: "#/components/schemas/legReference"
           type:
             type: string
-            pattern: "^(change_times)"
             enum: [ change_times ]
 
     assetInput:
@@ -1522,7 +1520,6 @@ components:
           type:
             type: string
             enum: [ redress ]
-            pattern: "^(redress)"
           redressOptionId:
             $ref: "#/components/schemas/uuid"
 
@@ -1535,7 +1532,6 @@ components:
         properties:
           type:
             type: string
-            pattern: "^(extend_expiry_time)"
             enum: [ extend_expiry_time ]
           extensionReason:
             type: string
@@ -2291,7 +2287,6 @@ components:
         properties:
           type:
             type: string
-            pattern: "^(asset)$"
             enum: [ asset ]
           id:
             $ref: "#/components/schemas/assetReference"
