@@ -108,6 +108,48 @@ paths:
                 "200":
                   description: Results received successfully
 
+  /processes/add-traveller/execute:
+    post:
+      operationId: addTravellerHandler
+      summary: Add a new traveller to a package
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+        - processes
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inputs:
+                  $ref: "#/components/schemas/travellerInput"
+                subscriber:
+                  $ref: "#/components/schemas/subscriber"
+      responses:
+        "200":
+          $ref: "#/components/responses/packageResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      callbacks:
+        jobCompleted:
+          "{$request.body#/subscriber/successUri}":
+            post:
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/package"
+              responses:
+                "200":
+                  description: Results received successfully
+
   /processes/update-traveller/execute:
     post:
       operationId: updateTravellerHandler
