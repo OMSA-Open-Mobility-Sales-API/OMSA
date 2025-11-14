@@ -2101,9 +2101,12 @@ components:
     travelParty:
       x-tm: ACCESS RIGHT PARAMETER ASSIGNMENT
       type: object
+      required:
+        - type
       properties:
         type:
           type: string
+          enum: [ individual_traveller, user_profile, asset ]
         entitlements:
           type: array
           items:
@@ -2155,6 +2158,18 @@ components:
       properties:
         type:
           type: string
+          enum: [
+            organisational,
+            spotReservation,
+            distribution,
+            network,
+            routing,
+            service,
+            temporal,
+            equipment,
+            cancel,
+            purchase
+          ]
 
     postalAddress:
       x-tm: POSTAL ADDRESS
@@ -2321,19 +2336,16 @@ components:
       properties:
         type:
           type: string
+          enum: [ individual_traveller, user_profile, companion_profile, commercial_profile, entitlement, card_type, card, license_type, license, asset ]
 
     # parameters
     travellingAsset:
       allOf:
-      - $ref: "#/components/schemas/usage"
+      - $ref: "#/components/schemas/travelParty"
       - type: object
         required:
-        - type
         - id
         properties:
-          type:
-            type: string
-            enum: [ asset ]
           id:
             $ref: "#/components/schemas/assetReference"
 
@@ -2344,13 +2356,9 @@ components:
         type: object
         required:
         - id
-        - type
         properties:
           id:
             $ref: "#/components/schemas/shortString"
-          type:
-            type: string
-            enum: [ user_profile ]
           count:
             $ref: "#/components/schemas/shortInt"
             default: 1
@@ -2374,19 +2382,22 @@ components:
           genderLimitation:
             type: boolean
 
+    companionProfile:
+      allOf:
+      - $ref: "#/components/schemas/usage"
+      - type: object
+        properties:
+          id:
+            $ref: "#/components/schemas/shortString"   
+
     commercialProfile:
       allOf:
       - $ref: "#/components/schemas/usage"
       - x-tm: COMMERCIAL PROFILE
-        required:
-        - type
         type: object
         properties:
           id:
             $ref: "#/components/schemas/shortString"
-          type:
-            type: string
-            enum: [ commercial_profile ]
           code:
             $ref: "#/components/schemas/shortString"
           name:
@@ -2398,15 +2409,11 @@ components:
       - x-tm: ENTITLEMENT GIVEN
         type: object
         required:
-          - type
           - entitlementType
         properties:
           id:
             $ref: "#/components/schemas/shortString"
             description: a unique ID for this usage. Especially required when it is a USER PROFILE or an INDIVIDUAL TRAVELLER. Other concepts might refer to this ID.
-          type:
-            type: string
-            enum: [ entitlement ]
           entitlementType:
             $ref: "#/components/schemas/normalString"
 
@@ -2455,13 +2462,9 @@ components:
       - x-tm: SEATING VALIDITY PARAMETERS
         type: object
         required:
-        - type
         - spotType
         - spot
         properties:
-          type:
-            type: string
-            enum: [ spotReservation ]
           spotType:
             type: string
             enum: [ vehicle_spot, passenger_spot, luggage_spot ]
@@ -2489,12 +2492,7 @@ components:
       - $ref: "#/components/schemas/parameter"
       - x-tm: NETWORK VALIDITY PARAMETERS
         type: object
-        required:
-        - type
         properties:
-          type:
-            type: string
-            enum: [ network ]
           location:
             $ref: "#/components/schemas/placeReference"
           line:
@@ -2511,11 +2509,9 @@ components:
         type: object
         required:
         - journeyPattern
-        - type
         properties:
           type:
             type: string
-            enum: [ routing ]
           journeyPattern:
             type: array
             items:
@@ -2526,12 +2522,9 @@ components:
       - $ref: "#/components/schemas/parameter"
       - x-tm: SERVICE VALIDITY PARAMETERS
         type: object
-        required:
-        - type
         properties:
           type:
             type: string
-            enum: [ service ]
           product:
             $ref: "#/components/schemas/productReference"
           asset:
@@ -2613,12 +2606,7 @@ components:
       - $ref: "#/components/schemas/parameter"
       - x-tm: DISTRIBUTION VALIDITY PARAMETERS
         type: object
-        required:
-        - type
         properties:
-          type:
-            type: string
-            enum: [ distribution ]
           fulfilmentMethod:
             $ref: "#/components/schemas/normalString"
           distributionChannel:
@@ -2630,14 +2618,10 @@ components:
       - x-tm: ORGANISATIONAL VALIDITY PARAMETERS
         required:
         - id
-        - type
         type: object
         properties:
           id:
             $ref: "#/components/schemas/shortString"
-          type:
-            type: string
-            enum: [ organisational ]
           name:
             $ref: "#/components/schemas/normalString"
           legalName:
@@ -2680,12 +2664,7 @@ components:
         - requiredLicenseTypes: ENTITLEMENT REQUIRED
         type: object
         description: specify required information to complete a purchase
-        required:
-        - type
         properties:
-          type:
-            type: string
-            enum: [ purchase ]
           maximumPeriodBeforeDeparture:
             $ref: "#/components/schemas/longInt"
             description: Maximum time in minutes that an asset can be reserved before a rental begins.
@@ -2701,7 +2680,6 @@ components:
       type: object
       description: Any kind of card that isn't a license, only provide the cards that are required
       required:
-        - type
         - cardNumber
       properties:
         type:
@@ -2731,15 +2709,11 @@ components:
         type: object
         description: A generic description of a CARD
         required:
-          - type
           - id
         properties:
           id:
             $ref: "#/components/schemas/shortString"
             description: external reference to address the card used.
-          type:
-            type: string
-            enum: [ card_type ]
           cardCategory:
             type: string
             description: The category of card<br>
@@ -2791,11 +2765,7 @@ components:
         description: A category of license to use a certain asset class
         required:
           - mode
-          - type
         properties:
-          type:
-            type: string
-            enum: [ license_type ]
           modes:
             type: array
             items:
