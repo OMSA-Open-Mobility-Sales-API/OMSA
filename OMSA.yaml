@@ -825,7 +825,7 @@ paths:
         url: https://app.swaggerhub.com/apis/OGC/ogcapi-features-1-example-1/1.0.1
       parameters:
         - $ref: '#/components/parameters/f'
-        - $ref: '#/components/headers/contentLanguage'
+        - $ref: '#/components/parameters/acceptLanguage'
       responses:
         '200':
           description: successful operation
@@ -869,7 +869,7 @@ paths:
         server conforms to.
       parameters:
         - $ref: '#/components/parameters/f'
-        - $ref: '#/components/headers/contentLanguage'
+        - $ref: '#/components/parameters/acceptLanguage'
       operationId: getConformanceDeclaration
       responses:
         '200':
@@ -929,7 +929,7 @@ paths:
       description: a (machine or human) readable description of this collection
       parameters:
         - $ref: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/parameters/collectionId.yaml'
-        - $ref: '#/components/headers/contentLanguage'
+        - $ref: '#/components/parameters/acceptLanguage'
       responses:
         '200':
           description: description of data delivered by this collection
@@ -963,7 +963,7 @@ paths:
         For more information, see [Section
         7.9](https://docs.ogc.org/is/18-062/18-062.html#sc_process_list).
       parameters:
-        - $ref: '#/components/headers/contentLanguage'
+        - $ref: '#/components/parameters/acceptLanguage'
       operationId: getProcesses
       responses:
         '200':
@@ -996,7 +996,7 @@ paths:
         For more information, see [Section 7.10](https://docs.ogc.org/is/18-062/18-062.html#sc_process_description).
       operationId: getProcessDescription
       parameters:
-        - $ref: '#/components/headers/contentLanguage'
+        - $ref: '#/components/parameters/acceptLanguage'
         - name: processID
           in: path
           required: true
