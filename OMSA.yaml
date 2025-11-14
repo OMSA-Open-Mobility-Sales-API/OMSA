@@ -1726,9 +1726,9 @@ components:
                 name:
                   type: string
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -1750,9 +1750,9 @@ components:
           items:
             $ref: "#/components/schemas/offer"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -2582,7 +2582,7 @@ components:
           $ref: "#/components/schemas/shortString"
 
     accommodation:
-       x-tm: ACCOMODATION
+      x-tm: ACCOMODATION
       type: object
       description: A combination of accommodation characteristics available on a service, e.g. "First Class Couchette with shower and 2 bunks".
       properties:
@@ -2859,9 +2859,9 @@ components:
                 items:
                   $ref: "#/components/schemas/link"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -2892,9 +2892,9 @@ components:
                 items:
                   $ref: "#/components/schemas/link"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
@@ -2929,9 +2929,9 @@ components:
                 items:
                   $ref: "#/components/schemas/link"
         numberMatched:
-          type: number
+          type: integer
         numberReturned:
-          type: number
+          type: integer
         links:
           type: array
           description:
