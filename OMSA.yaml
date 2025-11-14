@@ -568,7 +568,8 @@ paths:
               responses:
                 "200":
                   description: Results received successfully
-          $ref: "#/components/responses/errorResponse"
+                default:
+                  $ref: "#/components/responses/errorResponse"
 
   /processes/cancel-package/execute:
     post:
