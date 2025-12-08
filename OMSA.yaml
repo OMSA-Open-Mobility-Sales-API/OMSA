@@ -1601,12 +1601,23 @@ components:
       - type: object
         required:
         - type
-        - offerIds
+        - selections
         properties:
-          offerIds:
+          selections:
             type: array
+            description: "Component-based selection of offers and their ancillaries."
             items:
-              $ref: "#/components/schemas/offerReference"
+              type: object
+              required:
+                - offerId
+              properties:
+                offerId:
+                  $ref: "#/components/schemas/offerReference"
+                selectedAncillaryIds:
+                  type: array
+                  description: "List of ancillaryIds to include specifically for this offer instance."
+                  items:
+                    $ref: "#/components/schemas/ancillaryReference"
           type:
             type: string
             enum: [ select_offers ]
@@ -3084,6 +3095,15 @@ components:
           type:
             type: string
             enum: [ ancillary ]
+          price:
+            $ref: "#/components/schemas/amountOfMoney"
+            description: "The additional cost of this ancillary if selected."
+          description:
+            type: string
+            description: "A user-friendly description of the ancillary (e.g. 'Reserved seat for bike')."
+          available:
+            type: integer
+            description: "Number of items available in stock (inventory). Useful for creating urgency in GUI."
           links:
             type: array
             items:
