@@ -1603,6 +1603,9 @@ components:
         - type
         - selections
         properties:
+          type:
+            type: string
+            enum: [ select_offers ]
           selections:
             type: array
             description: "Component-based selection of offers and their ancillaries."
@@ -1610,17 +1613,25 @@ components:
               type: object
               required:
                 - offerId
+                - travellerIds
               properties:
                 offerId:
                   $ref: "#/components/schemas/offerReference"
+                travellerIds:
+                  type: array
+                  minItems: 1
+                  description: >
+                    References to travel parties (individual travellers, user profiles or
+                    assets) this selection applies to. Must match the `travellerReference`
+                    values used in the related search and must be compatible with the
+                    offer's `eligibleTravellerIds` if present.
+                  items:
+                    $ref: "#/components/schemas/travellerReference"
                 selectedAncillaryIds:
                   type: array
                   description: "List of ancillaryIds to include specifically for this offer instance."
                   items:
                     $ref: "#/components/schemas/ancillaryReference"
-          type:
-            type: string
-            enum: [ select_offers ]
 
     packageInput:
       allOf:
@@ -2033,6 +2044,16 @@ components:
                 $ref: "#/components/schemas/guarantee"
             expiryTime:
               $ref: '#/components/schemas/dateTime'
+            eligibleTravellerIds:
+              type: array
+              minItems: 1
+              description: >
+                References to travel parties (individual travellers, user profiles or
+                assets) that are eligible for this offer in the context of the search.
+                Items must match `travellerReference` values supplied in the corresponding
+                search request.
+              items:
+                $ref: "#/components/schemas/travellerReference"
         links:
           type: array
           items:
@@ -2504,7 +2525,7 @@ components:
         - id
         properties:
           id:
-            $ref: "#/components/schemas/assetReference"
+            $ref: "#/components/schemas/travellerReference"
 
     userProfile:
       allOf:
@@ -2515,7 +2536,7 @@ components:
         - id
         properties:
           id:
-            $ref: "#/components/schemas/shortString"
+            $ref: "#/components/schemas/travellerReference"
           count:
             $ref: "#/components/schemas/shortInt"
             default: 1
@@ -3359,6 +3380,9 @@ components:
     travellerReference:
       allOf:
         - $ref: "#/components/schemas/normalString"
+      description: >
+        Reference to a travel party member (individual traveller, user profile, or
+        travelling asset). Matches the id of an object implementing `travelParty`.
 
     productReference:
       type: object
