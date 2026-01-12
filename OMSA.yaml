@@ -1011,7 +1011,7 @@ paths:
               - update-traveller
               - assign-asset
               - assign-ancillary
-              - purchase-offer
+              - purchase-offers
               - select-offers
               - 2-phase-purchase-package
               - confirm-package
