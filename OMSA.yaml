@@ -3421,8 +3421,6 @@ components:
       description: JSON schema for exceptions based on RFC 7807
       required: 
         - type
-        - status
-        - title
       properties:
         type:
           type: string
