@@ -3487,6 +3487,7 @@ components:
             - GET
             - DELETE
             - PATCH
+            - PUT
         description:
           type: string
           description: the description of the external data source
