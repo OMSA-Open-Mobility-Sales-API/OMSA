@@ -402,48 +402,6 @@ paths:
                 "200":
                   description: Results received successfully
 
-  /processes/2-phase-purchase-package/execute:
-    post:
-      operationId: twoPhasePurchasePackageHandler
-      summary: "Handles purchase processes"
-      security:
-        - BearerAuth: []
-        - OAuth: []
-        - OAuthPKI: []
-      tags:
-      - processes
-      parameters:
-        - $ref: "#/components/parameters/acceptLanguage"
-        - $ref: "#/components/parameters/authorization"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                inputs:
-                  $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
-      responses:
-        "200":
-          $ref: "#/components/responses/packageResponse"
-        default:
-          $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
-
   /processes/confirm-package/execute:
     post:
       operationId: confirmPackageHandler
@@ -1013,7 +971,6 @@ paths:
               - assign-ancillary
               - purchase-offers
               - select-offers
-              - 2-phase-purchase-package
               - confirm-package
               - release-package
               - purchase-package
@@ -1336,7 +1293,6 @@ components:
         mapping:
           SEARCH_OFFER: "#/components/schemas/searchOfferInput"
           PURCHASE: "#/components/schemas/packageInput"
-          2_PHASE_PURCHASE: "#/components/schemas/packageInput"
           COMMIT: "#/components/schemas/packageInput"
           RELEASE: "#/components/schemas/packageInput"
           PURCHASE_PACKAGE: "#/components/schemas/purchasePackageInput"
