@@ -3301,8 +3301,7 @@ components:
 
     # referenced data
     externalReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     organisationReference:
       type: object
@@ -3333,13 +3332,11 @@ components:
           $ref: "#/components/schemas/normalString"
 
     customerReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
+      $ref: "#/components/schemas/normalString"
 
     travellerReference:
-      allOf:
-        - $ref: "#/components/schemas/normalString"
-
+      $ref: "#/components/schemas/normalString"
+      
     productReference:
       type: object
       required:
