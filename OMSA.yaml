@@ -2460,7 +2460,7 @@ components:
         - id
         properties:
           id:
-            $ref: "#/components/schemas/shortString"
+            $ref: "#/components/schemas/userProfileReference"
           count:
             $ref: "#/components/schemas/shortInt"
             default: 1
@@ -3291,6 +3291,9 @@ components:
       $ref: "#/components/schemas/normalString"
 
     travellerReference:
+      $ref: "#/components/schemas/normalString"
+    
+    userProfileReference:
       $ref: "#/components/schemas/normalString"
       
     productReference:
