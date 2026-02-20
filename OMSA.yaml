@@ -2447,7 +2447,7 @@ components:
         - id
         properties:
           id:
-            $ref: "#/components/schemas/assetReference"
+            $ref: "#/components/schemas/simpleAssetReference"
 
     userProfile:
       allOf:
@@ -3088,7 +3088,7 @@ components:
           type: string
           enum: [ asset ]
         id:
-          $ref: "#/components/schemas/assetReference"
+          $ref: "#/components/schemas/simpleAssetReference"
           description: Identifier of an asset. Can be an external reference, but also a (internal) ID
         visualId:
           $ref: "#/components/schemas/shortString"
@@ -3336,6 +3336,9 @@ components:
           $ref: "#/components/schemas/normalString"
         name:
           $ref: "#/components/schemas/normalString"
+    
+    simpleAssetReference:
+      $ref: "#/components/schemas/normalString"
 
     ancillaryReference:
       type: object
