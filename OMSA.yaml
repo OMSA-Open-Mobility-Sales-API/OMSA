@@ -769,6 +769,59 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
 
+  /collections/packages/items:
+    get:
+      operationId: packageCollectionHandler
+      summary: "Retrieve a history of purchased packages"
+      description: "Returns a paginated list of packages belonging to the authenticated user."
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+        - collections
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/optionalPackageId"
+        - name: status
+          in: query
+          description: "Filter packages by their lifecycle status (e.g. CONFIRMED, CANCELLED)"
+          required: false
+          schema:
+            $ref: "#/components/schemas/packageStatus"
+      responses:
+        "200":
+          $ref: "#/components/responses/packagesResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+
+  /collections/packages/items/{packageId}:
+    get:
+      summary: Retrieve a single package
+      operationId: getPackage
+      tags: [collections]
+      security:
+        - BearerAuth: []
+        - OAuth: []
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+        - name: packageId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the package to retrieve
+
+      responses:
+        "200":
+          $ref: "#/components/responses/packageResponse"
+        "404":
+          $ref: "#/components/responses/errorResponse"
+
   /:
     get:
       security:
@@ -803,6 +856,7 @@ paths:
                 type: string
         default:
           $ref: '#/components/responses/errorResponse'
+
   /api:
     get:
       description: This document
@@ -822,6 +876,7 @@ paths:
         - OpenData: []
       tags:
         - discovery
+
   /conformance:
     get:
       description: >-
@@ -853,6 +908,7 @@ paths:
         - OpenData: []
       tags:
         - discovery
+  
   /collections:
     get:
       security:
@@ -878,6 +934,7 @@ paths:
                 $ref: "#/components/schemas/collections"
         default:
           $ref: '#/components/responses/errorResponse'
+
   /collections/{collectionId}:
     get:
       security:
@@ -907,6 +964,7 @@ paths:
                 type: string
         default:
           $ref: '#/components/responses/errorResponse'
+
   /processes:
     get:
       security:
@@ -939,6 +997,7 @@ paths:
                 $ref: '#/components/schemas/processList'
         default:
           $ref: '#/components/responses/errorResponse'
+
   /processes/{processID}:
     get:
       security:
@@ -1053,6 +1112,7 @@ paths:
           description: "Unauthorized: Invalid client ID or secret."
         '500':
           description: "Internal Server Error: Something went wrong."
+
 components:
   responses:
     errorResponse:
@@ -1259,6 +1319,23 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/geojson'
+    
+    packagesResponse:
+      description: A list of packages
+      headers:
+        Version:
+          $ref: "#/components/headers/version"
+        Content-Language:
+          $ref: "#/components/headers/contentLanguage"
+        Expires:
+          schema:
+            $ref: "#/components/schemas/httpDate"
+          required: false
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/packageCollection"
+
   schemas:
     # OGC
     subscriber:
@@ -1897,6 +1974,31 @@ components:
           items:
             $ref: "#/components/schemas/link"
 
+    packageCollection:
+      type: object
+      required:
+        - type
+        - packages
+      properties:
+        type:
+          type: string
+          enum: ["PackageCollection"]
+        packages:
+          type: array
+          items:
+            $ref: "#/components/schemas/package"
+        numberMatched:
+          type: integer
+          description: Total number of packages available (for pagination)
+        numberReturned:
+          type: integer
+          description: Number of packages in this response
+        links:
+          type: array
+          description: Actions that can be performed on this collection.
+          items:
+            $ref: "#/components/schemas/link"
+      
     # Major Transmodel objects
     package:
       x-tm: TRAVEL OFFER PACKAGE, CUSTOMER PURCHASE PACKAGE
@@ -3498,6 +3600,7 @@ components:
       description: >-
         https://www.rfc-editor.org/rfc/rfc3339#section-5.6, full-date
         (2019-10-12)
+
     dateTime:
       type: string
       format: date-time
@@ -3505,6 +3608,7 @@ components:
       description: >-
         https://www.rfc-editor.org/rfc/rfc3339#section-5.6, date-time
         (2019-10-12T07:20:50.52Z)
+
     day:
       x-tm: DAY OF WEEK
       type: string
@@ -3516,11 +3620,13 @@ components:
         - FRI
         - SAT
         - SUN
+
     float:
       type: number
       description: the travelled distance. Only if applicable.
       format: float
       minimum: 0
+
     httpDate:
       type: string
       description: A HTTP date string
@@ -3528,49 +3634,59 @@ components:
       x-externalDocs:
         url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
         description: http-date
+
     longInt:
       type: integer
       description: long number, for distances etc. (>1.000)
       default: 0
       minimum: 0
+
     longString:
       type: string
       description: long string, memos etc (length 0-10.000)
       maxLength: 10000
+
     normalInt:
       type: integer
       description: default length for an integer (0-1000)
       default: 0
       minimum: 0
       maximum: 1000
+
     normalString:
       type: string
       description: default string, full names etc (length 0-200)
       maxLength: 200
+
     shortInt:
       type: integer
       description: a bit short integer (0-100)
       default: 0
       minimum: 0
       maximum: 100
+
     shortString:
       type: string
       description: short string, display names (length 0-75)
       maxLength: 75
+
     tinyInt:
       type: integer
       description: for really small numbers (0-10)
       default: 0
       minimum: 0
       maximum: 10
+
     tinyString:
       type: string
       description: real short string, codes (length 0-10)
       maxLength: 10
+
     url:
       type: string
       description: valid URL
       format: uri
+
     uuid:
       type: string
       x-preferred-pattern: >-
@@ -3597,6 +3713,7 @@ components:
           - html
         type: string
       style: form
+    
     packageId:
       in: query
       name: packageId
@@ -3604,6 +3721,7 @@ components:
         type: string
       required: true
       description: the identifier of a package
+    
     optionalPackageId:
       in: query
       name: packageId
@@ -3611,6 +3729,7 @@ components:
         type: string
       required: false
       description: the identifier of a package
+    
     acceptLanguage:
       in: header
       name: Accept-Language
@@ -3624,6 +3743,7 @@ components:
           languages/localizations the user would like to see the results in.
           For user privacy and ease of use on the TO side, this list should be
           kept as short as possible
+    
     collectionId:
       name: collectionId
       in: path
@@ -3631,6 +3751,7 @@ components:
       required: true
       schema:
         type: string
+    
     authorization:
       in: header
       name: authorization
@@ -3638,6 +3759,7 @@ components:
       schema:
         type: string
       description: Header field, JWT must be supplied
+    
     legId:
       in: query
       name: legId
@@ -3645,6 +3767,7 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/legReference'
+    
     optionalLegId:
       in: query
       name: legId
@@ -3652,6 +3775,7 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/legReference'
+    
     optionalTravellerId:
       in: query
       name: travellerId
@@ -3659,6 +3783,7 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/travellerReference'
+    
     optionalAncillaryId:
       in: query
       name: ancillaryId
@@ -3666,6 +3791,7 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/externalReference'
+    
     optionalProductId:
       in: query
       name: productId
@@ -3673,6 +3799,7 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/normalString'
+    
     productId:
       in: query
       name: productId
@@ -3680,6 +3807,7 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/normalString'
+    
     limit:
       name: limit
       in: query
@@ -3701,6 +3829,7 @@ components:
         default: 100
       style: form
       explode: false
+    
     offset:
       name: offset
       in: query
@@ -3722,6 +3851,7 @@ components:
         default: 0
       style: form
       explode: false
+    
     bbox:
       name: bbox
       in: query
@@ -3777,6 +3907,7 @@ components:
           type: number
       style: form
       explode: false
+  
   headers:
     contentLanguage:
       description: >-
@@ -3786,21 +3917,25 @@ components:
         type: string
         pattern: ^[a-zA-Z]+-[a-zA-Z]+$
       required: true
+    
     expires:
       description: this field MUST be there whenever the package hasn't been purchased.
       schema:
         $ref: '#/components/schemas/httpDate'
       required: false
+    
     version:
       description: the version used to format the response
       schema:
         type: string
       required: true
+    
     digest:
       description: the hash of the body, SHA-256 ("SHA-256=3q2+7w==:")
       schema:
         type: string
       required: false
+    
     publicKey:
       description: >-
         the public key of the sending party, can be used to validate the signed
@@ -3812,6 +3947,7 @@ components:
       schema:
         type: string
       required: false
+    
     signedDigest:
       description: >-
         the signed hash of the offer (or package), using the private key,
@@ -3819,6 +3955,7 @@ components:
       schema:
         type: string
       required: false
+    
   securitySchemes:
     OpenData:
       type: http
@@ -3826,6 +3963,7 @@ components:
         this data set is open. If it is one of the options, it is up to the
         implementing party whether it is open or not.
       scheme: none
+    
     BearerAuth:
       type: http
       description: >-
@@ -3833,6 +3971,7 @@ components:
         (somewhere), you can use this token to identify you at endpoints.
       scheme: bearer
       bearerFormat: JWT
+    
     OAuth:
       type: oauth2
       description: >-
@@ -3845,6 +3984,7 @@ components:
           tokenUrl: /oauth/token
           scopes:
             processes: Access to /processes/
+    
     OAuthPKI:
       type: oauth2
       description: >-
