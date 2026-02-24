@@ -2124,6 +2124,7 @@ components:
           BARCODE: "#/components/schemas/binaryTicket"
           QRCODE: "#/components/schemas/binaryTicket"
           AZTECCODE: "#/components/schemas/binaryTicket"
+          MULTIPART: "#/components/schemas/multipartTicket"
       required:
         - startValidity
         - endValidity
@@ -2152,6 +2153,7 @@ components:
           physical_key,
           external_card,
           none, # OTHER
+          multipart,
         ]
 
     # Transmodel based objects
@@ -3014,6 +3016,7 @@ components:
                 oneOf:
                 - $ref: "#/components/schemas/externalTicket"
                 - $ref: "#/components/schemas/binaryTicket"
+                - $ref: "#/components/schemas/multipartTicket"
                 discriminator:
                   propertyName: type
               links:
@@ -3185,7 +3188,7 @@ components:
             $ref: "#/components/schemas/tinyString"
 
     externalTicket:
-      x-tm: 
+      x-tm:
       - concept: TRAVEL DOCUMENT
       allOf:
       - $ref: "#/components/schemas/travelDocument"
@@ -3195,6 +3198,27 @@ components:
           type:
             type: string
             enum: [ digital_ticket ]
+
+    multipartTicket:
+      allOf:
+      - $ref: "#/components/schemas/travelDocument"
+      - type: object
+        description: A travel document consisting of multiple sub-documents (e.g., a QR code and control image) that function as a single unit.
+        required:
+          - type
+          - subDocuments
+        properties:
+          type:
+            type: string
+            enum: [ multipart ]
+          subDocuments:
+            type: array
+            description: The collection of individual documents that make up this ticket.
+            minItems: 1
+            items:
+              oneOf:
+              - $ref: "#/components/schemas/externalTicket"
+              - $ref: "#/components/schemas/binaryTicket"
 
     financialDetail:
       type: object
