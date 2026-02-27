@@ -339,7 +339,7 @@ paths:
               type: object
               properties:
                 inputs:
-                  $ref: "#/components/schemas/packageInput"
+                  $ref: "#/components/schemas/purchaseOffersInput"
                 subscriber:
                   $ref: "#/components/schemas/subscriber"
       responses:
@@ -381,7 +381,7 @@ paths:
               type: object
               properties:
                 inputs:
-                  $ref: "#/components/schemas/packageInput"
+                  $ref: "#/components/schemas/purchasePackageInput"
                 subscriber:
                   $ref: "#/components/schemas/subscriber"
       responses:
@@ -507,7 +507,7 @@ paths:
               type: object
               properties:
                 inputs:
-                  $ref: "#/components/schemas/packageInput"
+                  $ref: "#/components/schemas/extendExpiryTimeInput"
                 subscriber:
                   $ref: "#/components/schemas/subscriber"
       responses:
@@ -1581,7 +1581,7 @@ components:
           type:
             type: string
             enum: [ package ]
-
+    
     legInput:
       allOf:
       - $ref: "#/components/schemas/packageInput"
