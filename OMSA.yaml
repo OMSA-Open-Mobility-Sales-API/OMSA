@@ -1519,7 +1519,7 @@ components:
       - $ref: "#/components/schemas/defaultInput"
       - type: object
         required:
-        - travellers
+        - travelParties
         - type
         description: A package planning request, resulting in package options
         properties:
@@ -1534,20 +1534,12 @@ components:
             $ref: "#/components/schemas/tripPattern"
           packageToExchange:
             $ref: "#/components/schemas/packageReference"
-          travellers:
+          travelParties:
             type: array
             maxItems: 10
             minItems: 1
             items:
-              $ref: "#/components/schemas/individualTraveller"
-          profiles:
-            type: array
-            items:
-              $ref: "#/components/schemas/userProfile"
-          travellingAssets:
-            type: array
-            items:
-              $ref: "#/components/schemas/travellingAsset"
+              $ref: "#/components/schemas/travelParty"
 
     selectOffersInput:
       allOf:
@@ -1645,11 +1637,8 @@ components:
           $ref: "#/components/schemas/travellerReference"
         packageId:
           $ref: "#/components/schemas/packageReference"
-        updatedTraveller:
-          oneOf:
-            - $ref: "#/components/schemas/individualTraveller"
-            - $ref: "#/components/schemas/userProfile"
-            - $ref: "#/components/schemas/travellingAsset"
+        updatedTravelParty:
+          $ref: "#/components/schemas/travelParty"
 
     travelSpecificationInput:
       allOf:
@@ -1929,13 +1918,10 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/externalReference"
-          travellers:
+          travelParties:
             type: array
             items:
-              oneOf:
-              - $ref: "#/components/schemas/individualTraveller"
-              - $ref: "#/components/schemas/userProfile"
-              - $ref: "#/components/schemas/travellingAsset"
+              $ref: "#/components/schemas/travelParty"
           links:
             type: array
             items:
@@ -2242,6 +2228,12 @@ components:
       type: object
       required:
         - type
+      discriminator:
+        propertyName: type
+        mapping:
+          individual_traveller: "#/components/schemas/individualTraveller"
+          user_profile: "#/components/schemas/userProfile"
+          asset: "#/components/schemas/travellingAsset"
       properties:
         type:
           type: string
@@ -2445,9 +2437,13 @@ components:
       - type: object
         required:
         - id
+        - type
         properties:
           id:
             $ref: "#/components/schemas/simpleAssetReference"
+          type:
+            type: string
+            enum: [ asset ]
 
     userProfile:
       allOf:
@@ -2456,9 +2452,13 @@ components:
         type: object
         required:
         - id
+        - type
         properties:
           id:
             $ref: "#/components/schemas/userProfileReference"
+          type:
+            type: string
+            enum: [ user_profile ]
           count:
             $ref: "#/components/schemas/shortInt"
             default: 1
