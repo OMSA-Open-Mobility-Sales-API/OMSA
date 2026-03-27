@@ -3614,7 +3614,7 @@ components:
     acceptLanguage:
       in: header
       name: Accept-Language
-      required: true
+      required: false
       schema:
         $ref: '#/components/schemas/shortString'
       x-externalDocs:
