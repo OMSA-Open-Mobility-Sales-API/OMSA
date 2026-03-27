@@ -1055,6 +1055,111 @@ paths:
         default:
           $ref: '#/components/responses/errorResponse'
 
+  /jobs:
+    get:
+      operationId: getJobs
+      summary: retrieve the list of jobs
+      description: >
+        Lists asynchronous execution jobs for processes that support
+        `async-execute`.
+        Supports pagination and optional filters following OGC job list semantics.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+        - processes
+      parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
+        - $ref: '#/components/parameters/authorization'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/jobType'
+        - $ref: '#/components/parameters/jobProcessId'
+        - $ref: '#/components/parameters/jobStatus'
+        - $ref: '#/components/parameters/jobDatetime'
+        - $ref: '#/components/parameters/jobMinDuration'
+        - $ref: '#/components/parameters/jobMaxDuration'
+      responses:
+        '200':
+          $ref: '#/components/responses/jobListResponse'
+        '400':
+          $ref: '#/components/responses/errorResponse'
+        default:
+          $ref: '#/components/responses/errorResponse'
+
+  /jobs/{jobId}:
+    get:
+      operationId: getJobStatus
+      summary: retrieve the status of a job
+      description: >
+        Returns status information for a previously accepted asynchronous job.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+        - processes
+      parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
+        - $ref: '#/components/parameters/authorization'
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '200':
+          $ref: '#/components/responses/jobStatusResponse'
+        '404':
+          $ref: '#/components/responses/errorResponse'
+        default:
+          $ref: '#/components/responses/errorResponse'
+    delete:
+      operationId: dismissJob
+      summary: cancel a running job or remove a finished job
+      description: >
+        Implements OGC dismiss semantics.
+        Implementations that do not advertise `dismiss` for a process may reject
+        this operation.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+        - processes
+      parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
+        - $ref: '#/components/parameters/authorization'
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '200':
+          $ref: '#/components/responses/jobStatusResponse'
+        '404':
+          $ref: '#/components/responses/errorResponse'
+        default:
+          $ref: '#/components/responses/errorResponse'
+
+  /jobs/{jobId}/results:
+    get:
+      operationId: getJobResults
+      summary: retrieve the result(s) of a job
+      description: >
+        Returns the outputs of a completed asynchronous job.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+        - processes
+      parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
+        - $ref: '#/components/parameters/authorization'
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '200':
+          $ref: '#/components/responses/jobResultsResponse'
+        '404':
+          $ref: '#/components/responses/errorResponse'
+        default:
+          $ref: '#/components/responses/errorResponse'
+
   /oauth/token:
     post:
       summary: "Token Endpoint"
@@ -1329,6 +1434,44 @@ components:
           schema:
             $ref: '#/components/schemas/statusInfo'
 
+    jobListResponse:
+      description: a list of asynchronous jobs
+      headers:
+        Version:
+          $ref: '#/components/headers/version'
+        Content-Language:
+          $ref: '#/components/headers/contentLanguage'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/jobList'
+
+    jobStatusResponse:
+      description: the status of a job
+      headers:
+        Version:
+          $ref: '#/components/headers/version'
+        Content-Language:
+          $ref: '#/components/headers/contentLanguage'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/statusInfo'
+
+    jobResultsResponse:
+      description: the results of a completed job
+      headers:
+        Version:
+          $ref: '#/components/headers/version'
+        Content-Language:
+          $ref: '#/components/headers/contentLanguage'
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/jobResults'
+              - $ref: '#/components/schemas/error'
+
     offerResponse:
       description: a geojson response
       headers:
@@ -1421,6 +1564,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/link'
+
+    jobList:
+      type: object
+      required:
+        - jobs
+        - links
+      properties:
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/statusInfo'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/link'
+        timeStamp:
+          type: string
+          format: date-time
+        numberMatched:
+          type: integer
+          minimum: 0
+        numberReturned:
+          type: integer
+          minimum: 0
+
+    jobResults:
+      type: object
+      description: Result payload keyed by output identifier.
+      additionalProperties: true
 
     defaultInput:
       type: object
@@ -3801,6 +3973,83 @@ components:
         type: string
         enum: [ respond-async ]
       description: Request asynchronous execution. Only applicable for processes that advertise `async-execute`.
+    jobId:
+      name: jobId
+      in: path
+      required: true
+      description: Identifier of an asynchronous job.
+      schema:
+        type: string
+    jobType:
+      name: type
+      in: query
+      required: false
+      description: Filter jobs by type. OMSA jobs use `process`.
+      schema:
+        type: array
+        items:
+          type: string
+          enum: [ process ]
+      style: form
+      explode: false
+    jobProcessId:
+      name: processID
+      in: query
+      required: false
+      description: Filter jobs by one or more process identifiers.
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: false
+    jobStatus:
+      name: status
+      in: query
+      required: false
+      description: Filter jobs by one or more execution states.
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/statusCode'
+      style: form
+      explode: false
+    jobDatetime:
+      name: datetime
+      in: query
+      required: false
+      description: >-
+        Filter jobs by creation time.
+        Value is an RFC3339 date-time or an interval (start/end), where either
+        side may be open (`../end` or `start/..`).
+      schema:
+        type: string
+    jobMinDuration:
+      name: minDuration
+      in: query
+      required: false
+      description: >-
+        Minimum duration in seconds for finished jobs.
+      schema:
+        type: array
+        items:
+          type: integer
+          minimum: 0
+      style: form
+      explode: false
+    jobMaxDuration:
+      name: maxDuration
+      in: query
+      required: false
+      description: >-
+        Maximum duration in seconds for finished jobs.
+      schema:
+        type: array
+        items:
+          type: integer
+          minimum: 0
+      style: form
+      explode: false
     legId:
       in: query
       name: legId
