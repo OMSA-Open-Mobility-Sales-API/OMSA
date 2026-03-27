@@ -917,7 +917,16 @@ paths:
       description: >
         The list of processes contains a summary of each process the OGC API -
         Processes offers, including the link to a more detailed description of
-        the process.
+        the process. By default OMSA supports synchronous execution only.
+
+
+        Asynchronous execution is optional and is advertised per process through
+        `jobControlOptions`.
+
+
+        If a process advertises `async-execute`, the implementation should support
+        asynchronous OGC execution semantics, including `Prefer: respond-async`
+        and OGC job resources (e.g. `/jobs/{jobId}`).
 
 
         For more information, see [Section
@@ -953,6 +962,10 @@ paths:
         interface of a process. That said, the Core requirements class makes the
         following recommendation:
         Implementations SHOULD consider supporting the OGC process description.
+        A process that only supports synchronous execution should expose
+        `jobControlOptions: [sync-execute]`. If a process exposes
+        `async-execute`, it should also expose OGC job resources for tracking
+        and retrieving results.
         For more information, see [Section 7.10](https://docs.ogc.org/is/18-062/18-062.html#sc_process_description).
       operationId: getProcessDescription
       parameters:
@@ -1271,6 +1284,11 @@ components:
         Support for this parameter is not required and the parameter may be
         removed from the API definition, if conformance class **'callback'**
         is not listed in the conformance declaration under `/conformance`.
+        This callback mechanism is complementary to OGC job resources and does
+        not replace `/jobs` when asynchronous execution is supported.
+        The `subscriber` object may also be provided for synchronous execution.
+        In that case, the synchronous `200` response remains authoritative and
+        callbacks should be treated as optional best-effort notifications.
       required:
         - successUri
       properties:
@@ -1452,12 +1470,29 @@ components:
             type: string
           jobControlOptions:
             type: array
+            description: |-
+              Supported execution control modes for this process.
+
+              Baseline OMSA behavior is synchronous execution (`sync-execute`).
+              `async-execute` and `dismiss` are optional capabilities.
+
+              If `async-execute` is listed for a process, the implementation
+              should support OGC asynchronous execution behavior, including
+              job status and results resources (for example `/jobs/{jobId}` and
+              `/jobs/{jobId}/results`). In this case, synchronous execution
+              typically returns `200`, while asynchronous acceptance returns
+              `201` with a `Location` header for the job resource. When
+              `sync-execute` is used, callback delivery via `subscriber` may be
+              supported but is optional and does not replace the direct response.
             items:
               type: string
               enum:
                 - sync-execute
                 - async-execute
                 - dismiss
+            default: [ sync-execute ]
+            minItems: 1
+            uniqueItems: true
           links:
             type: array
             items:
