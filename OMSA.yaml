@@ -2917,7 +2917,7 @@ components:
       properties:
         amount:
           type: number
-          format: float
+          format: decimal
           description: This should be in the base unit as defined by the ISO 4217 currency code with the appropriate number of decimal places and omitting the currency symbol. e.g. if the price is in US Dollars the price would be 9.95. This is inclusive VAT
         taxPercentageUsed:
           $ref: "#/components/schemas/float"
