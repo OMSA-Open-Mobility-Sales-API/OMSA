@@ -34,6 +34,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
         - $ref: "#/components/parameters/bbox"
@@ -51,6 +52,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/searchOfferResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -79,6 +82,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -93,6 +97,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -121,6 +127,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -135,6 +142,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -163,6 +172,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -177,6 +187,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -205,6 +217,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -219,6 +232,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -247,6 +262,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -261,6 +277,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -289,6 +307,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -303,6 +322,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -331,6 +352,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -345,6 +367,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -373,6 +397,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -387,6 +412,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -415,6 +442,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -429,6 +457,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -457,6 +487,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -471,6 +502,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -499,6 +532,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -513,6 +547,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -543,6 +579,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -557,6 +594,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -585,6 +624,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -599,6 +639,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -627,6 +669,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/acceptLanguage"
         - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/preferRespondAsync"
       requestBody:
         required: true
         content:
@@ -641,6 +684,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
+        "201":
+          $ref: "#/components/responses/executeAsyncAcceptedResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -827,6 +872,10 @@ paths:
       description: >-
         A list of all conformance classes specified in a standard that the
         server conforms to.
+        If asynchronous execution is supported, the implementation should list
+        the relevant OGC conformance classes for job handling and callback
+        (for example `.../conf/job-list`, `.../conf/callback`,
+        `.../conf/dismiss`).
       parameters:
         - $ref: '#/components/parameters/f'
         - $ref: '#/components/parameters/acceptLanguage'
@@ -1257,6 +1306,29 @@ components:
           schema:
             $ref: '#/components/schemas/package'
 
+    executeAsyncAcceptedResponse:
+      description: asynchronous execution accepted
+      headers:
+        Version:
+          $ref: '#/components/headers/version'
+        Content-Language:
+          $ref: '#/components/headers/contentLanguage'
+        Location:
+          description: URL of the created job resource
+          required: true
+          schema:
+            $ref: '#/components/schemas/url'
+        Preference-Applied:
+          description: "Indicates that the server accepted Prefer: respond-async"
+          required: false
+          schema:
+            type: string
+            enum: [ respond-async ]
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/statusInfo'
+
     offerResponse:
       description: a geojson response
       headers:
@@ -1301,6 +1373,54 @@ components:
         failedUri:
           type: string
           format: uri
+
+    statusCode:
+      type: string
+      enum:
+        - accepted
+        - running
+        - successful
+        - failed
+        - dismissed
+
+    statusInfo:
+      type: object
+      required:
+        - processID
+        - type
+        - jobID
+        - status
+      properties:
+        processID:
+          type: string
+          description: Identifier of the executed process.
+        type:
+          type: string
+          enum:
+            - process
+        jobID:
+          type: string
+          description: Unique job identifier.
+        status:
+          $ref: '#/components/schemas/statusCode'
+        message:
+          $ref: '#/components/schemas/normalString'
+        created:
+          $ref: '#/components/schemas/dateTime'
+        started:
+          $ref: '#/components/schemas/dateTime'
+        finished:
+          $ref: '#/components/schemas/dateTime'
+        updated:
+          $ref: '#/components/schemas/dateTime'
+        progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/link'
 
     defaultInput:
       type: object
@@ -3673,6 +3793,14 @@ components:
       schema:
         type: string
       description: Header field, JWT must be supplied
+    preferRespondAsync:
+      in: header
+      name: Prefer
+      required: false
+      schema:
+        type: string
+        enum: [ respond-async ]
+      description: Request asynchronous execution. Only applicable for processes that advertise `async-execute`.
     legId:
       in: query
       name: legId
