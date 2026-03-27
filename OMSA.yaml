@@ -751,6 +751,122 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
 
+  /collections/customers/items:
+    get:
+      operationId: customerCollectionHandler
+      summary: "List customers"
+      description: Retrieve customers with optional filters and pagination.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+      - collections
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/optionalCustomerId"
+        - $ref: "#/components/parameters/optionalCustomerFirstName"
+        - $ref: "#/components/parameters/optionalCustomerLastName"
+        - $ref: "#/components/parameters/optionalCustomerEmail"
+        - $ref: "#/components/parameters/optionalCustomerPhoneNumber"
+      responses:
+        "200":
+          $ref: "#/components/responses/customerCollectionResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+    post:
+      operationId: createCustomerHandler
+      summary: "Create customer"
+      description: Create a customer record that can be used for purchases.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+      - collections
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/customer"
+      responses:
+        "201":
+          $ref: "#/components/responses/customerResponse"
+        "200":
+          $ref: "#/components/responses/customerResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+
+  /collections/customers/items/{customerId}:
+    parameters:
+      - $ref: "#/components/parameters/customerId"
+    get:
+      operationId: getCustomerHandler
+      summary: "Get customer"
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+      - collections
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+      responses:
+        "200":
+          $ref: "#/components/responses/customerResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+    patch:
+      operationId: updateCustomerHandler
+      summary: "Update customer"
+      description: Update one or more customer fields.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+      - collections
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: "#/components/schemas/customerPatch"
+      responses:
+        "200":
+          $ref: "#/components/responses/customerResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+    delete:
+      operationId: deleteCustomerHandler
+      summary: "Delete customer"
+      description: Delete the customer record.
+      security:
+        - BearerAuth: []
+        - OAuth: []
+        - OAuthPKI: []
+      tags:
+      - collections
+      parameters:
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/authorization"
+      responses:
+        "204":
+          description: Customer deleted successfully
+        default:
+          $ref: "#/components/responses/errorResponse"
+
   /collections/datasources/items:
     get:
       security:
@@ -862,7 +978,7 @@ paths:
       summary: the feature collections in the dataset
       description: >-
         returns a collection of available collection (like offers, packages,
-        legs, support-requests and payments)
+        legs, customers, support-requests and payments)
       operationId: getCollections
       responses:
         '200':
@@ -1178,6 +1294,30 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/travelDocumentCollection"
+
+    customerResponse:
+      description: a customer response
+      headers:
+        Version:
+          $ref: '#/components/headers/version'
+        Content-Language:
+          $ref: '#/components/headers/contentLanguage'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/customer'
+
+    customerCollectionResponse:
+      description: a customer collection response
+      headers:
+        Version:
+          $ref: '#/components/headers/version'
+        Content-Language:
+          $ref: '#/components/headers/contentLanguage'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/customerCollection'
 
     dataSourceResponse:
       description: a list of datasources
@@ -3296,7 +3436,7 @@ components:
         - id
       properties:
         id:
-          $ref: "#/components/schemas/normalString"
+          $ref: "#/components/schemas/customerReference"
           description: The identifier used to identify the customer. This can be an external reference ID.
         firstName:
           $ref: "#/components/schemas/shortString"
@@ -3337,6 +3477,61 @@ components:
         customProperties:
           $ref: "#/components/schemas/customProperties"
           description: Additional custom properties agreed between parties
+
+    customerPatch:
+      type: object
+      description: Patch object for updating customer fields.
+      properties:
+        firstName:
+          $ref: "#/components/schemas/shortString"
+        lastName:
+          $ref: "#/components/schemas/shortString"
+        initials:
+          $ref: "#/components/schemas/tinyString"
+        middleName:
+          $ref: "#/components/schemas/shortString"
+        prefix:
+          $ref: "#/components/schemas/tinyString"
+        postfix:
+          $ref: "#/components/schemas/tinyString"
+        email:
+          $ref: "#/components/schemas/normalString"
+        phoneNumber:
+          $ref: "#/components/schemas/normalString"
+        address:
+          $ref: "#/components/schemas/postalAddress"
+        dateOfBirth:
+          $ref: "#/components/schemas/date"
+        placeOfBirth:
+          $ref: "#/components/schemas/shortString"
+        countryOfBirth:
+          $ref: "#/components/schemas/country"
+        customProperties:
+          $ref: "#/components/schemas/customProperties"
+
+    customerCollection:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: ["CustomerCollection"]
+        customers:
+          type: array
+          items:
+            $ref: "#/components/schemas/customer"
+        numberMatched:
+          type: integer
+        numberReturned:
+          type: integer
+        links:
+          type: array
+          description:
+            actions that can be performed on this package, but also alternative (rel=alternative+1, alternative+2) offers or references to other resources
+            In case it is an alternative, specify clearly in the description what the financial consequences are.
+          items:
+            $ref: "#/components/schemas/link"
 
     customerReference:
       $ref: "#/components/schemas/normalString"
@@ -3664,6 +3859,41 @@ components:
         type: string
       required: false
       description: the identifier of a package
+    optionalCustomerId:
+      in: query
+      name: customerId
+      schema:
+        $ref: '#/components/schemas/customerReference'
+      required: false
+      description: optional customer identifier filter
+    optionalCustomerFirstName:
+      in: query
+      name: firstName
+      schema:
+        $ref: '#/components/schemas/shortString'
+      required: false
+      description: optional first name filter
+    optionalCustomerLastName:
+      in: query
+      name: lastName
+      schema:
+        $ref: '#/components/schemas/shortString'
+      required: false
+      description: optional last name filter
+    optionalCustomerEmail:
+      in: query
+      name: email
+      schema:
+        $ref: '#/components/schemas/normalString'
+      required: false
+      description: optional email filter
+    optionalCustomerPhoneNumber:
+      in: query
+      name: phoneNumber
+      schema:
+        $ref: '#/components/schemas/normalString'
+      required: false
+      description: optional phone number filter
     acceptLanguage:
       in: header
       name: Accept-Language
@@ -3684,6 +3914,13 @@ components:
       required: true
       schema:
         type: string
+    customerId:
+      in: path
+      name: customerId
+      description: customer identifier
+      required: true
+      schema:
+        $ref: '#/components/schemas/customerReference'
     authorization:
       in: header
       name: authorization
