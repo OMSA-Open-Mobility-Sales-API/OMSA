@@ -1566,7 +1566,7 @@ components:
             enum: [ select_offers ]
           customer:
             $ref: "#/components/schemas/customer"
-            description: The buyer or customer making the purchase. This may be different from the travellers in B2B scenarios (e.g., travel agency booking for clients).
+            description: The customer making the purchase. This can be different from the travellers.
 
     packageInput:
       allOf:
@@ -3291,25 +3291,25 @@ components:
     customer:
       x-tm: TRANSPORT CUSTOMER
       type: object
-      description: Represents the buyer or customer, which may be different from the travellers. Supports B2B scenarios where the buyer (e.g., travel agency, corporate account, parent) is separate from the travel party.
+      description: A customer that purchases a package. This can be different from the travellers.
       required:
         - id
       properties:
         id:
           $ref: "#/components/schemas/normalString"
-          description: The unique identifier for this customer (e.g., travel agency ID, corporate account number, ABT number)
+          description: The identifier used to identify the customer. This can be an external reference ID.
         firstName:
           $ref: "#/components/schemas/shortString"
-          description: The buyer's given name
+          description: First name of the customer
         lastName:
           $ref: "#/components/schemas/shortString"
-          description: The buyer's family name
+          description: Last name of the customer
         initials:
           $ref: "#/components/schemas/tinyString"
-          description: The buyer's initials
+          description: Initials of the customer
         middleName:
           $ref: "#/components/schemas/shortString"
-          description: The buyer's middle name
+          description: Middle name of the customer
         prefix:
           $ref: "#/components/schemas/tinyString"
           description: Name prefix (e.g., Dr., Prof.)
@@ -3318,25 +3318,25 @@ components:
           description: Name postfix (e.g., Jr., Sr., III)
         email:
           $ref: "#/components/schemas/normalString"
-          description: The buyer's email address
+          description: Email address of the customer
         phoneNumber:
           $ref: "#/components/schemas/normalString"
-          description: The buyer's contact phone number
+          description: Contact phone number of the customer
         address:
           $ref: "#/components/schemas/postalAddress"
-          description: The billing or physical address of the buyer
+          description: Billing or contact address of the customer
         dateOfBirth:
           $ref: "#/components/schemas/date"
-          description: The buyer's date of birth (if required for B2C bookings)
+          description: Date of birth of the customer, if required for booking
         placeOfBirth:
           $ref: "#/components/schemas/shortString"
-          description: The buyer's place of birth
+          description: Place of birth of the customer
         countryOfBirth:
           $ref: "#/components/schemas/country"
-          description: The buyer's country of birth
+          description: Country of birth of the customer
         customProperties:
           $ref: "#/components/schemas/customProperties"
-          description: Additional custom properties for bilateral agreements
+          description: Additional custom properties agreed between parties
 
     customerReference:
       $ref: "#/components/schemas/normalString"
