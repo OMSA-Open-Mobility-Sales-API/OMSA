@@ -1564,6 +1564,9 @@ components:
           type:
             type: string
             enum: [ select_offers ]
+          customer:
+            $ref: "#/components/schemas/customer"
+            description: The customer making the purchase. This can be different from the travellers.
 
     packageInput:
       allOf:
@@ -3282,6 +3285,56 @@ components:
           pattern: "^(GPS:|NSR:StopPlace:|P:)"
         name:
           $ref: "#/components/schemas/normalString"
+
+    customer:
+      x-tm: TRANSPORT CUSTOMER
+      type: object
+      description: A customer that purchases a package. This can be different from the travellers.
+      required:
+        - id
+      properties:
+        id:
+          $ref: "#/components/schemas/normalString"
+          description: The identifier used to identify the customer. This can be an external reference ID.
+        firstName:
+          $ref: "#/components/schemas/shortString"
+          description: First name of the customer
+        lastName:
+          $ref: "#/components/schemas/shortString"
+          description: Last name of the customer
+        initials:
+          $ref: "#/components/schemas/tinyString"
+          description: Initials of the customer
+        middleName:
+          $ref: "#/components/schemas/shortString"
+          description: Middle name of the customer
+        prefix:
+          $ref: "#/components/schemas/tinyString"
+          description: Name prefix (e.g., Dr., Prof.)
+        postfix:
+          $ref: "#/components/schemas/tinyString"
+          description: Name postfix (e.g., Jr., Sr., III)
+        email:
+          $ref: "#/components/schemas/normalString"
+          description: Email address of the customer
+        phoneNumber:
+          $ref: "#/components/schemas/normalString"
+          description: Contact phone number of the customer
+        address:
+          $ref: "#/components/schemas/postalAddress"
+          description: Billing or contact address of the customer
+        dateOfBirth:
+          $ref: "#/components/schemas/date"
+          description: Date of birth of the customer, if required for booking
+        placeOfBirth:
+          $ref: "#/components/schemas/shortString"
+          description: Place of birth of the customer
+        countryOfBirth:
+          $ref: "#/components/schemas/country"
+          description: Country of birth of the customer
+        customProperties:
+          $ref: "#/components/schemas/customProperties"
+          description: Additional custom properties agreed between parties
 
     customerReference:
       $ref: "#/components/schemas/normalString"
