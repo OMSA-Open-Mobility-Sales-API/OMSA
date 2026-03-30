@@ -1301,9 +1301,6 @@ components:
       properties:
         type:
           type: string
-        timestamp:
-          description: timestamp of request
-          $ref: "#/components/schemas/dateTime"
 
     landingPage:
       type: object
