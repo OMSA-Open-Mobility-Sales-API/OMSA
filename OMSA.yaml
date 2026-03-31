@@ -785,7 +785,7 @@ paths:
         - $ref: "#/components/parameters/authorization"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/offset"
-        - $ref: "#/components/parameters/optionalPackageId"
+        - $ref: "#/components/parameters/optionalCustomerReference"
         - name: status
           in: query
           description: "Filter packages by their lifecycle status (e.g. CONFIRMED, CANCELLED)"
@@ -3783,6 +3783,14 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/travellerReference'
+    
+    optionalCustomerReference:
+      in: query
+      name: customerReference
+      description: Customer reference used to filter packages for a specific customer
+      required: false
+      schema:
+        $ref: '#/components/schemas/customerReference'
     
     optionalAncillaryId:
       in: query
