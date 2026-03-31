@@ -1581,7 +1581,7 @@ components:
           type:
             type: string
             enum: [ package ]
-    
+
     legInput:
       allOf:
       - $ref: "#/components/schemas/packageInput"
