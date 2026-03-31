@@ -23,7 +23,7 @@ tags:
 paths:
   /processes/search-offers/execute:
     post:
-      operationId: searchOfferHandler
+      operationId: searchOffersHandler
       summary: "Handles search offers"
       security:
         - BearerAuth: []
@@ -45,12 +45,12 @@ paths:
               type: object
               properties:
                 inputs:
-                  $ref: "#/components/schemas/searchOfferInput"
+                  $ref: "#/components/schemas/searchOffersInput"
                 subscriber:
                   $ref: "#/components/schemas/subscriber"
       responses:
         "200":
-          $ref: "#/components/responses/searchOfferResponse"
+          $ref: "#/components/responses/searchOffersResponse"
         default:
           $ref: "#/components/responses/errorResponse"
       callbacks:
@@ -1073,7 +1073,7 @@ components:
             $ref: '#/components/schemas/error'
     
     landingPageResponse:
-      description: The reponse containing a landing page
+      description: The response containing a landing page
       headers:
         Version:
           $ref: '#/components/headers/version'
@@ -1211,7 +1211,7 @@ components:
             items:
               $ref: '#/components/schemas/ancillaryCollection'
 
-    searchOfferResponse:
+    searchOffersResponse:
       description: a search offer response
       headers:
         Version:
@@ -1289,7 +1289,7 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          SEARCH_OFFER: "#/components/schemas/searchOfferInput"
+          SEARCH_OFFER: "#/components/schemas/searchOffersInput"
           PURCHASE: "#/components/schemas/packageInput"
           COMMIT: "#/components/schemas/packageInput"
           RELEASE: "#/components/schemas/packageInput"
@@ -1511,7 +1511,7 @@ components:
             type: string
 
     # Inputs
-    searchOfferInput:
+    searchOffersInput:
       allOf:
       - $ref: "#/components/schemas/defaultInput"
       - type: object
@@ -1703,7 +1703,7 @@ components:
 
     purchasePackageInput:
       allOf:
-        - $ref: "#/components/schemas/searchOfferInput"
+        - $ref: "#/components/schemas/searchOffersInput"
         - type: object
           required:
           - type
