@@ -1504,24 +1504,12 @@ components:
           type: string
           enum: [ search_offer ]
         specification:
-          type: object
-          properties:
-            from:
-              $ref: "#/components/schemas/externalReference"
-            via:
-              type: array
-              minItems: 0
-              maxItems: 3
-              items:
-                $ref: "#/components/schemas/externalReference"
-            to:
-              $ref: "#/components/schemas/externalReference"
-            startTime:
-              $ref: "#/components/schemas/dateTime"
-            endTime:
-              $ref: "#/components/schemas/dateTime"
-            placeDefinitions:
-              $ref: "#/components/schemas/placeDefinitions"
+          allOf:
+          - $ref: "#/components/schemas/requestedTravelSpecification"
+          - type: object
+            properties:
+              placeDefinitions:
+                $ref: "#/components/schemas/placeDefinitions"
         pattern:
           $ref: "#/components/schemas/tripPattern"
         packageToExchange:
@@ -1694,24 +1682,12 @@ components:
           type: string
           enum: [ purchase_package ]
         specification:
-          type: object
-          properties:
-            from:
-              $ref: "#/components/schemas/externalReference"
-            via:
-              type: array
-              minItems: 0
-              maxItems: 3
-              items:
-                $ref: "#/components/schemas/externalReference"
-            to:
-              $ref: "#/components/schemas/externalReference"
-            startTime:
-              $ref: "#/components/schemas/dateTime"
-            endTime:
-              $ref: "#/components/schemas/dateTime"
-            placeDefinitions:
-              $ref: "#/components/schemas/placeDefinitions"
+          allOf:
+          - $ref: "#/components/schemas/requestedTravelSpecification"
+          - type: object
+            properties:
+              placeDefinitions:
+                $ref: "#/components/schemas/placeDefinitions"
         pattern:
           $ref: "#/components/schemas/tripPattern"
         packageToExchange:
@@ -1749,24 +1725,12 @@ components:
           $ref: "#/components/schemas/customer"
           description: The customer making the purchase. This can be different from the travellers.
         specification:
-          type: object
-          properties:
-            from:
-              $ref: "#/components/schemas/externalReference"
-            via:
-              type: array
-              minItems: 0
-              maxItems: 3
-              items:
-                $ref: "#/components/schemas/externalReference"
-            to:
-              $ref: "#/components/schemas/externalReference"
-            startTime:
-              $ref: "#/components/schemas/dateTime"
-            endTime:
-              $ref: "#/components/schemas/dateTime"
-            placeDefinitions:
-              $ref: "#/components/schemas/placeDefinitions"
+          allOf:
+          - $ref: "#/components/schemas/requestedTravelSpecification"
+          - type: object
+            properties:
+              placeDefinitions:
+                $ref: "#/components/schemas/placeDefinitions"
         pattern:
           $ref: "#/components/schemas/tripPattern"
         packageToExchange:
