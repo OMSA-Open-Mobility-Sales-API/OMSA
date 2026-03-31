@@ -46,25 +46,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/searchOfferInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/searchOfferResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/geojson'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/select-offers/execute:
     post:
@@ -88,25 +74,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/selectOffersInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/add-traveller/execute:
     post:
@@ -130,25 +102,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/travellerInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          "{$request.body#/subscriber/successUri}":
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: "#/components/schemas/package"
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/update-traveller/execute:
     post:
@@ -172,25 +130,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/travellerInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/remove-traveller/execute:
     post:
@@ -214,25 +158,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/travellerInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/assign-asset/execute:
     post:
@@ -256,25 +186,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/assetInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/assign-ancillary/execute:
     post:
@@ -298,25 +214,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/ancillaryInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/purchase-offers/execute:
     post:
@@ -340,25 +242,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/purchase-package/execute:
     post:
@@ -382,25 +270,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/confirm-package/execute:
     post:
@@ -424,25 +298,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/release-package/execute:
     post:
@@ -466,25 +326,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/extend-expiry-time/execute:
     post:
@@ -508,27 +354,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
-                default:
-                  $ref: "#/components/responses/errorResponse"
 
   /processes/cancel-package/execute:
     post:
@@ -552,25 +382,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/packageInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/claim-refund-option/execute:
     post:
@@ -594,25 +410,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/refundOptionInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /processes/confirm-refund-option/execute:
     post:
@@ -636,25 +438,11 @@ paths:
               properties:
                 inputs:
                   $ref: "#/components/schemas/refundOptionInput"
-                subscriber:
-                  $ref: "#/components/schemas/subscriber"
       responses:
         "200":
           $ref: "#/components/responses/packageResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-      callbacks:
-        jobCompleted:
-          '{$request.body#/subscriber/successUri}':
-            post:
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/package'
-              responses:
-                "200":
-                  description: Results received successfully
 
   /collections/assets/items:
     get:
@@ -1261,29 +1049,6 @@ components:
             $ref: '#/components/schemas/geojson'
   schemas:
     # OGC
-    subscriber:
-      type: object
-      externalDocs:
-        url: https://github.com/opengeospatial/ogcapi-processes/raw/refs/heads/master/openapi/schemas/processes-core/subscriber.yaml
-      description: |-
-        Optional URIs for callbacks for this job.
-
-        Support for this parameter is not required and the parameter may be
-        removed from the API definition, if conformance class **'callback'**
-        is not listed in the conformance declaration under `/conformance`.
-      required:
-        - successUri
-      properties:
-        successUri:
-          type: string
-          format: uri
-        inProgressUri:
-          type: string
-          format: uri
-        failedUri:
-          type: string
-          format: uri
-
     defaultInput:
       type: object
       discriminator:
@@ -1453,7 +1218,6 @@ components:
               type: string
               enum:
                 - sync-execute
-                - async-execute
                 - dismiss
           links:
             type: array
