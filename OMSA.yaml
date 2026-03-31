@@ -824,10 +824,10 @@ paths:
           $ref: "#/components/responses/customerResponse"
         default:
           $ref: "#/components/responses/errorResponse"
-    patch:
+    put:
       operationId: updateCustomerHandler
       summary: "Update customer"
-      description: Update one or more customer fields.
+      description: Replace the customer record.
       security:
         - BearerAuth: []
         - OAuth: []
@@ -840,9 +840,9 @@ paths:
       requestBody:
         required: true
         content:
-          application/merge-patch+json:
+          application/json:
             schema:
-              $ref: "#/components/schemas/customerPatch"
+              $ref: "#/components/schemas/customer"
       responses:
         "200":
           $ref: "#/components/responses/customerResponse"
@@ -3477,37 +3477,6 @@ components:
         customProperties:
           $ref: "#/components/schemas/customProperties"
           description: Additional custom properties agreed between parties
-
-    customerPatch:
-      type: object
-      description: Patch object for updating customer fields.
-      properties:
-        firstName:
-          $ref: "#/components/schemas/shortString"
-        lastName:
-          $ref: "#/components/schemas/shortString"
-        initials:
-          $ref: "#/components/schemas/tinyString"
-        middleName:
-          $ref: "#/components/schemas/shortString"
-        prefix:
-          $ref: "#/components/schemas/tinyString"
-        postfix:
-          $ref: "#/components/schemas/tinyString"
-        email:
-          $ref: "#/components/schemas/normalString"
-        phoneNumber:
-          $ref: "#/components/schemas/normalString"
-        address:
-          $ref: "#/components/schemas/postalAddress"
-        dateOfBirth:
-          $ref: "#/components/schemas/date"
-        placeOfBirth:
-          $ref: "#/components/schemas/shortString"
-        countryOfBirth:
-          $ref: "#/components/schemas/country"
-        customProperties:
-          $ref: "#/components/schemas/customProperties"
 
     customerCollection:
       type: object
