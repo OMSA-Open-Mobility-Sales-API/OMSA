@@ -4,7 +4,7 @@ info:
   version: 0.1.0
 
 servers:
-  - url: https://example.b5/
+  - url: https://example.b5
     description: example url
 
 tags:
@@ -57,6 +57,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -99,6 +101,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -141,6 +145,8 @@ paths:
         jobCompleted:
           "{$request.body#/subscriber/successUri}":
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -183,6 +189,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -225,6 +233,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -267,6 +277,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -309,6 +321,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -351,6 +365,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -393,6 +409,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -435,6 +453,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -477,6 +497,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -519,6 +541,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -563,6 +587,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -605,6 +631,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -647,6 +675,8 @@ paths:
         jobCompleted:
           '{$request.body#/subscriber/successUri}':
             post:
+              summary: "Callback completion notification"
+              security: []
               requestBody:
                 content:
                   application/json:
@@ -805,6 +835,7 @@ paths:
           $ref: '#/components/responses/errorResponse'
   /api:
     get:
+      operationId: getApiDocument
       description: This document
       parameters:
         - $ref: '#/components/parameters/f'
@@ -995,11 +1026,13 @@ paths:
 
   /oauth/token:
     post:
+      operationId: tokenEndpoint
       summary: "Token Endpoint"
       description: This endpoint is used to obtain an access token and optionally an ID token
         through different OAuth 2.0 grant types, including Client Credentials Flow.
         Whenever the mTLS flow is taken, the properties will be ignored, and the access token
         will be generated based on the credentials in the certificate (O or CN).
+      security: []
       tags:
       - authentication
       requestBody:
@@ -2849,7 +2882,7 @@ components:
       type: object
       description: driver or usage license for a specific user. Contains the number and the assetType you're allowed to operate (e.g. driver license for CAR)
       required:
-        - number
+        - licenseNumber
         - type
       properties:
         type:
@@ -2869,7 +2902,7 @@ components:
         type: object
         description: A category of license to use a certain asset class
         required:
-          - mode
+          - modes
         properties:
           modes:
             type: array
