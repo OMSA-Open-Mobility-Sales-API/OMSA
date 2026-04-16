@@ -2684,7 +2684,7 @@ components:
         - id
         properties:
           id:
-            $ref: "#/components/schemas/assetReference"
+            $ref: "#/components/schemas/simpleAssetReference"
 
     userProfile:
       allOf:
@@ -2695,7 +2695,7 @@ components:
         - id
         properties:
           id:
-            $ref: "#/components/schemas/shortString"
+            $ref: "#/components/schemas/userProfileReference"
           count:
             $ref: "#/components/schemas/shortInt"
             default: 1
@@ -3325,7 +3325,7 @@ components:
           type: string
           enum: [ asset ]
         id:
-          $ref: "#/components/schemas/assetReference"
+          $ref: "#/components/schemas/simpleAssetReference"
           description: Identifier of an asset. Can be an external reference, but also a (internal) ID
         visualId:
           $ref: "#/components/schemas/shortString"
@@ -3598,6 +3598,9 @@ components:
 
     travellerReference:
       $ref: "#/components/schemas/normalString"
+    
+    userProfileReference:
+      $ref: "#/components/schemas/normalString"
       
     productReference:
       type: object
@@ -3641,6 +3644,9 @@ components:
           $ref: "#/components/schemas/normalString"
         name:
           $ref: "#/components/schemas/normalString"
+    
+    simpleAssetReference:
+      $ref: "#/components/schemas/normalString"
 
     ancillaryReference:
       type: object
