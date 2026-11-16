@@ -1931,6 +1931,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/offer"
+        unavailableProducts:
+          type: array
+          items:
+            $ref: "#/components/schemas/unavailableProduct"
         numberMatched:
           type: integer
         numberReturned:
@@ -2074,6 +2078,58 @@ components:
               description: The physical asset(s) used for the execution of the leg
             operator:
               $ref: "#/components/schemas/organisationReference"
+    
+    unavailableProduct:
+      type: object
+      x-tm: SALES OFFER PACKAGE
+      required:
+        - type
+        - id
+        - reason
+      properties:
+        type:
+          type: string
+          pattern: "^(unavailable_product)$"
+        id:
+          $ref: "#/components/schemas/externalReference"
+          description: The NeTEx id of the unavailable product.
+        name:
+          type: string
+          description: human readable name for the product
+        serviceJourneySummary:
+          $ref: "#/components/schemas/serviceJourneySummary"
+        reason:
+          $ref: "#/components/schemas/unavailableProductReason"
+
+    unavailableProductReason:
+      type: string
+      description: |-
+        Why the product cannot be purchased right now.
+
+        - SOLD_OUT refers to the product being out of stock.
+        - NOT_IN_PURCHASE_WINDOW means that the product has a purchase window prior to departure that has not yet opened.
+        - NO_LONGER_AVAILABLE means that this product is no longer available for purchase
+        - OTHER means that there was another reason that is not specified by this API
+      enum:
+        - SOLD_OUT
+        - NOT_IN_PURCHASE_WINDOW
+        - NO_LONGER_AVAILABLE
+        - OTHER
+    
+    serviceJourneySummary:
+      type: object
+      x-tm: SALES OFFER PACKAGE
+      required:
+        - datedServiceJourneyId
+        - serviceJourneyId
+      description: A service journey summary that contains both the service journey reference and the dated service journey reference.
+      properties:
+        datedServiceJourneyId:
+          $ref: "#/components/schemas/datedServiceJourneyReference"
+          description: the dated service journey ID for the product
+        serviceJourneyId:
+          $ref: "#/components/schemas/serviceJourneyReference"
+          description: the service journey ID for the product
 
     product:
       x-tm: FARE PRODUCT
@@ -3402,6 +3458,9 @@ components:
           $ref: "#/components/schemas/normalString"
         name:
           $ref: "#/components/schemas/normalString"
+
+    datedServiceJourneyReference:
+      $ref: "#/components/schemas/normalString"
 
     serviceJourneyReference:
       $ref: "#/components/schemas/normalString"
